@@ -1,0 +1,497 @@
+2024-09-23 11:58:54,595 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.16.51.83:5000
+2024-09-23 11:58:54,595 - INFO - [33mPress CTRL+C to quit[0m
+2024-09-23 11:58:54,596 - INFO -  * Restarting with stat
+2024-09-23 11:58:54,789 - WARNING -  * Debugger is active!
+2024-09-23 11:58:54,791 - INFO -  * Debugger PIN: 182-532-775
+2024-09-23 11:59:26,792 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 11:59:26,793 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 11:59:26,793 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 11:59:26,793 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 11:59:26,805 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 11:59:26,805 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000118307,"vendor_50000227369":null,"cost_50000227369":null,"warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":null,"last_audit_date_50000227369":null,"os_50000227396":null,"numro_de_tlphone_50000227396":null,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":null,"pin_code_50000227396":null,"puk_code_50000227396":null,"lock_code_50000227396":null}
+2024-09-23 11:59:26,805 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : None
+2024-09-23 11:59:26,808 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0..............................'
+2024-09-23 11:59:26,809 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'test vide'
+2024-09-23 11:59:26,809 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par '..............................'
+2024-09-23 11:59:26,810 - DEBUG - script.py : Remplacement de '{{IMEI}}' par '..............................'
+2024-09-23 11:59:26,811 - DEBUG - script.py : Remplacement de '{{PIN}}' par '..............................'
+2024-09-23 11:59:26,812 - DEBUG - script.py : Remplacement de '{{PUK}}' par '..............................'
+2024-09-23 11:59:26,812 - DEBUG - script.py : Remplacement de '{{Lock}}' par '..............................'
+2024-09-23 11:59:26,820 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 11:59:26,820 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Christian HESS ADM'
+2024-09-23 11:59:26,832 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Christian HESS ADM/Reglement_sortie_Mobile Phone_test vide_Christian HESS ADM.docx
+2024-09-23 11:59:28,039 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Christian HESS ADM/Reglement_sortie_Mobile Phone_test vide_Christian HESS ADM_7.pdf
+2024-09-23 11:59:28,039 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Christian HESS ADM/Reglement_sortie_Mobile Phone_test vide_Christian HESS ADM.docx
+2024-09-23 11:59:28,040 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Christian HESS ADM/Reglement_sortie_Mobile Phone_test vide_Christian HESS ADM_7.pdf
+2024-09-23 11:59:28,040 - INFO - 127.0.0.1 - - [23/Sep/2024 11:59:28] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 13:50:32,489 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 13:50:32,491 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Timéa EMERY",
+   "Date" : "Mon, 23 Sep, 2024 13:50 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 13:50:32,491 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 13:50:32,492 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 13:50:32,514 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Timéa EMERY",
+   "Date" : "Mon, 23 Sep, 2024 13:50 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 13:50:32,514 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000138518,"vendor_50000227369":null,"cost_50000227369":null,"warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"SN123456","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791112233,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"<div style=\"color: red;\">test</div>","lock_code_50000227396":12345}
+2024-09-23 13:50:32,514 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN123456
+2024-09-23 13:50:32,517 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791112233'
+2024-09-23 13:50:32,519 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'Test avec puk'
+2024-09-23 13:50:32,521 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN123456'
+2024-09-23 13:50:32,524 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 13:50:32,526 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 13:50:32,527 - DEBUG - script.py : Remplacement de '{{PUK}}' par '<div style="color: red;">test</div>'
+2024-09-23 13:50:32,529 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 13:50:32,538 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 13:50:32,538 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Timéa EMERY'
+2024-09-23 13:50:32,551 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Timéa EMERY/Reglement_sortie_Mobile Phone_Test avec puk_Timéa EMERY.docx
+2024-09-23 13:50:34,588 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Timéa EMERY/Reglement_sortie_Mobile Phone_Test avec puk_Timéa EMERY.pdf
+2024-09-23 13:50:34,588 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Timéa EMERY/Reglement_sortie_Mobile Phone_Test avec puk_Timéa EMERY.docx
+2024-09-23 13:50:34,588 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Timéa EMERY/Reglement_sortie_Mobile Phone_Test avec puk_Timéa EMERY.pdf
+2024-09-23 13:50:34,588 - INFO - 127.0.0.1 - - [23/Sep/2024 13:50:34] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 14:06:30,207 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 14:06:30,207 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000114461,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"R58RA2X2TQT-\",\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":0,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":null,\"pin_code_50000227396\":0,\"puk_code_50000227396\":null,\"lock_code_50000227396\":0}",
+   "Appareil" : "MOB-Asset-863",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:06 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 14:06:30,207 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 14:06:30,207 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 14:06:30,225 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000114461,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"R58RA2X2TQT-\",\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":0,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":null,\"pin_code_50000227396\":0,\"puk_code_50000227396\":null,\"lock_code_50000227396\":0}",
+   "Appareil" : "MOB-Asset-863",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:06 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 14:06:30,225 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000114461,"vendor_50000227369":null,"cost_50000227369":"0.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"R58RA2X2TQT-","last_audit_date_50000227369":null,"os_50000227396":null,"numro_de_tlphone_50000227396":0,"os_version_50000227396":null,"memory_50000227396":"0","imei_number_50000227396":null,"pin_code_50000227396":0,"puk_code_50000227396":null,"lock_code_50000227396":0}
+2024-09-23 14:06:30,225 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : R58RA2X2TQT-
+2024-09-23 14:06:30,227 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0..............................'
+2024-09-23 14:06:30,228 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'MOB-Asset-863'
+2024-09-23 14:06:30,228 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'R58RA2X2TQT-'
+2024-09-23 14:06:30,229 - DEBUG - script.py : Remplacement de '{{IMEI}}' par '..............................'
+2024-09-23 14:06:30,230 - DEBUG - script.py : Remplacement de '{{PIN}}' par '..............................'
+2024-09-23 14:06:30,230 - DEBUG - script.py : Remplacement de '{{PUK}}' par '..............................'
+2024-09-23 14:06:30,231 - DEBUG - script.py : Remplacement de '{{Lock}}' par '..............................'
+2024-09-23 14:06:30,241 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 14:06:30,242 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Parvez Sualeheen'
+2024-09-23 14:06:30,260 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_MOB-Asset-863_Parvez Sualeheen.docx
+2024-09-23 14:06:32,512 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_MOB-Asset-863_Parvez Sualeheen.pdf
+2024-09-23 14:06:32,512 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_MOB-Asset-863_Parvez Sualeheen.docx
+2024-09-23 14:06:32,512 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_MOB-Asset-863_Parvez Sualeheen.pdf
+2024-09-23 14:06:32,512 - INFO - 127.0.0.1 - - [23/Sep/2024 14:06:32] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 14:30:22,037 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 14:30:22,038 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:30 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 14:30:22,038 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 14:30:22,038 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 14:30:22,071 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:30 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 14:30:22,071 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000138518,"vendor_50000227369":null,"cost_50000227369":"100.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"SN123456","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791112233,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"<div style=\"color: red;\">test</div>","lock_code_50000227396":12345}
+2024-09-23 14:30:22,071 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN123456
+2024-09-23 14:30:22,075 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791112233'
+2024-09-23 14:30:22,079 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'Test avec puk'
+2024-09-23 14:30:22,081 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN123456'
+2024-09-23 14:30:22,083 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 14:30:22,085 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 14:30:22,086 - DEBUG - script.py : Remplacement de '{{PUK}}' par '<div style="color: red;">test</div>'
+2024-09-23 14:30:22,087 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 14:30:22,111 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 14:30:22,113 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Parvez Sualeheen'
+2024-09-23 14:30:22,128 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.docx
+2024-09-23 14:30:24,293 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.pdf
+2024-09-23 14:30:24,294 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.docx
+2024-09-23 14:30:24,294 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.pdf
+2024-09-23 14:30:24,295 - INFO - 127.0.0.1 - - [23/Sep/2024 14:30:24] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 14:38:34,076 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 14:38:34,077 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:38 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 14:38:34,077 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 14:38:34,078 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 14:38:34,098 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:38 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 14:38:34,099 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000138518,"vendor_50000227369":null,"cost_50000227369":"100.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"SN123456","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791112233,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"<div style=\"color: red;\">test</div>","lock_code_50000227396":12345}
+2024-09-23 14:38:34,099 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN123456
+2024-09-23 14:38:34,101 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791112233'
+2024-09-23 14:38:34,102 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'Test avec puk'
+2024-09-23 14:38:34,102 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN123456'
+2024-09-23 14:38:34,113 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 14:38:34,115 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 14:38:34,115 - DEBUG - script.py : Remplacement de '{{PUK}}' par '<div style="color: red;">test</div>'
+2024-09-23 14:38:34,116 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 14:38:34,123 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 14:38:34,124 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Parvez Sualeheen'
+2024-09-23 14:38:34,138 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.docx
+2024-09-23 14:38:36,086 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen_1.pdf
+2024-09-23 14:38:36,086 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen.docx
+2024-09-23 14:38:36,086 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Parvez Sualeheen/Reglement_sortie_Mobile Phone_Test avec puk_Parvez Sualeheen_1.pdf
+2024-09-23 14:38:36,086 - INFO - 127.0.0.1 - - [23/Sep/2024 14:38:36] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 14:39:05,180 - INFO -  * Detected change in '/home/john/Projets/creer_doc_freshdesk/script.py', reloading
+2024-09-23 14:39:05,308 - INFO -  * Restarting with stat
+2024-09-23 14:39:05,600 - WARNING -  * Debugger is active!
+2024-09-23 14:39:05,604 - INFO -  * Debugger PIN: 182-532-775
+2024-09-23 14:40:45,773 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 14:40:45,774 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:40 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 14:40:45,774 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 14:40:45,774 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 14:40:45,788 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000138518,\"vendor_50000227369\":null,\"cost_50000227369\":\"100.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN123456\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791112233,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"<div style=\\\"color: red;\\\">test</div>\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Test avec puk",
+   "Nom" : "Parvez Sualeheen",
+   "Date" : "Mon, 23 Sep, 2024 14:40 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 14:40:45,788 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000138518,"vendor_50000227369":null,"cost_50000227369":"100.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"SN123456","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791112233,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"<div style=\"color: red;\">test</div>","lock_code_50000227396":12345}
+2024-09-23 14:40:45,788 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN123456
+2024-09-23 14:40:45,791 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791112233'
+2024-09-23 14:40:45,792 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'Test avec puk'
+2024-09-23 14:40:45,793 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN123456'
+2024-09-23 14:40:45,794 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 14:40:45,795 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 14:40:45,797 - DEBUG - script.py : Remplacement de '{{PUK}}' par '<div style="color: red;">test</div>'
+2024-09-23 14:40:45,798 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 14:40:45,805 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 14:40:45,806 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'John-Davy FERREIRA'
+2024-09-23 14:40:45,818 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_Test avec puk_John-Davy FERREIRA.docx
+2024-09-23 14:40:47,483 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_Test avec puk_John-Davy FERREIRA.pdf
+2024-09-23 14:40:47,483 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_Test avec puk_John-Davy FERREIRA.docx
+2024-09-23 14:40:47,484 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_Test avec puk_John-Davy FERREIRA.pdf
+2024-09-23 14:40:47,484 - INFO - 127.0.0.1 - - [23/Sep/2024 14:40:47] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 15:30:45,429 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 15:30:45,430 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":"testdonnée/"bvlabla"}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:30:45,430 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 15:30:45,430 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 15:30:45,440 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":"testdonnée/"bvlabla"}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:30:45,441 - ERROR - app.py : Erreur lors du traitement du webhook : Expecting ',' delimiter: line 2 column 596 (char 597)
+2024-09-23 15:30:45,441 - INFO - 127.0.0.1 - - [23/Sep/2024 15:30:45] "[35m[1mPOST /webhook HTTP/1.1[0m" 500 -
+2024-09-23 15:35:06,627 - INFO -  * Detected change in '/home/john/Projets/creer_doc_freshdesk/script.py', reloading
+2024-09-23 15:35:06,726 - INFO -  * Restarting with stat
+2024-09-23 15:35:07,012 - WARNING -  * Debugger is active!
+2024-09-23 15:35:07,014 - INFO -  * Debugger PIN: 182-532-775
+2024-09-23 15:35:14,722 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 15:35:14,723 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":"testdonnée/"bvlabla"}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:35:14,723 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 15:35:14,723 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 15:35:14,736 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":"testdonnée/"bvlabla"}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:35:14,736 - ERROR - script.py : Erreur lors de la création des données Json : Expecting ',' delimiter: line 2 column 596 (char 597)
+2024-09-23 15:35:14,736 - ERROR - app.py : Erreur lors du traitement du webhook : Expecting ',' delimiter: line 2 column 596 (char 597)
+2024-09-23 15:35:14,736 - INFO - 127.0.0.1 - - [23/Sep/2024 15:35:14] "[35m[1mPOST /webhook HTTP/1.1[0m" 500 -
+2024-09-23 15:36:04,327 - INFO -  * Detected change in '/home/john/Projets/creer_doc_freshdesk/script.py', reloading
+2024-09-23 15:36:04,408 - INFO -  * Restarting with stat
+2024-09-23 15:36:04,682 - WARNING -  * Debugger is active!
+2024-09-23 15:36:04,685 - INFO -  * Debugger PIN: 182-532-775
+2024-09-23 15:36:18,958 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 15:36:18,959 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:36:18,959 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 15:36:18,959 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 15:36:18,970 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "test vide",
+   "Nom" : "Christian HESS ADM",
+   "Date" : "Mon, 23 Sep, 2024 11:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone"
+}
+2024-09-23 15:36:18,970 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000118307,"vendor_50000227369":null,"cost_50000227369":null,"warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":null,"last_audit_date_50000227369":null,"os_50000227396":null,"numro_de_tlphone_50000227396":null,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":null,"pin_code_50000227396":null,"puk_code_50000227396":null,"lock_code_50000227396":null}
+2024-09-23 15:36:18,970 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : None
+2024-09-23 15:36:18,973 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0..............................'
+2024-09-23 15:36:18,975 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'test vide'
+2024-09-23 15:36:18,975 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par '..............................'
+2024-09-23 15:36:18,976 - DEBUG - script.py : Remplacement de '{{IMEI}}' par '..............................'
+2024-09-23 15:36:18,977 - DEBUG - script.py : Remplacement de '{{PIN}}' par '..............................'
+2024-09-23 15:36:18,978 - DEBUG - script.py : Remplacement de '{{PUK}}' par '..............................'
+2024-09-23 15:36:18,978 - DEBUG - script.py : Remplacement de '{{Lock}}' par '..............................'
+2024-09-23 15:36:18,985 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 15:36:18,986 - DEBUG - script.py : Remplacement de '{{Nom}}' par '..............................'
+2024-09-23 15:36:18,996 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/............................../Reglement_sortie_Mobile Phone_test vide_...............................docx
+2024-09-23 15:36:20,128 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/............................../Reglement_sortie_Mobile Phone_test vide_...............................pdf
+2024-09-23 15:36:20,128 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/............................../Reglement_sortie_Mobile Phone_test vide_...............................docx
+2024-09-23 15:36:20,128 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/............................../Reglement_sortie_Mobile Phone_test vide_...............................pdf
+2024-09-23 15:36:20,128 - INFO - 127.0.0.1 - - [23/Sep/2024 15:36:20] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 15:43:01,716 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 15:43:01,716 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "test vide",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 15:43 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 15:43:01,717 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 15:43:01,717 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 15:43:01,748 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "test vide",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 15:43 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "John-Davy FERREIRA"
+}
+2024-09-23 15:43:01,748 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000118307,"vendor_50000227369":null,"cost_50000227369":"0.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":4,"serial_number_50000227369":"SN1234567","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791377081,"os_version_50000227396":null,"memory_50000227396":"0","imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"123456","lock_code_50000227396":12345}
+2024-09-23 15:43:01,749 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN1234567
+2024-09-23 15:43:01,754 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791377081'
+2024-09-23 15:43:01,757 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'test vide'
+2024-09-23 15:43:01,759 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN1234567'
+2024-09-23 15:43:01,760 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 15:43:01,761 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 15:43:01,762 - DEBUG - script.py : Remplacement de '{{PUK}}' par '123456'
+2024-09-23 15:43:01,763 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 15:43:01,779 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 15:43:01,780 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'John-Davy FERREIRA'
+2024-09-23 15:43:01,806 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_test vide_John-Davy FERREIRA.docx
+2024-09-23 15:43:03,583 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_test vide_John-Davy FERREIRA.pdf
+2024-09-23 15:43:03,583 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_test vide_John-Davy FERREIRA.docx
+2024-09-23 15:43:03,583 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/John-Davy FERREIRA/Reglement_sortie_Mobile Phone_test vide_John-Davy FERREIRA.pdf
+2024-09-23 15:43:03,584 - INFO - 127.0.0.1 - - [23/Sep/2024 15:43:03] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 15:56:52,156 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 15:56:52,156 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "test vide",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 15:56 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "Hervé DUBRIT"
+}
+2024-09-23 15:56:52,157 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 15:56:52,157 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 15:56:52,167 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "test vide",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 15:56 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "Hervé DUBRIT"
+}
+2024-09-23 15:56:52,167 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000118307,"vendor_50000227369":null,"cost_50000227369":"0.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":1,"serial_number_50000227369":"SN1234567","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791377081,"os_version_50000227396":null,"memory_50000227396":"0","imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"123456","lock_code_50000227396":12345}
+2024-09-23 15:56:52,168 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN1234567
+2024-09-23 15:56:52,169 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791377081'
+2024-09-23 15:56:52,170 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'test vide'
+2024-09-23 15:56:52,171 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN1234567'
+2024-09-23 15:56:52,177 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 15:56:52,179 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 15:56:52,180 - DEBUG - script.py : Remplacement de '{{PUK}}' par '123456'
+2024-09-23 15:56:52,180 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 15:56:52,189 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 15:56:52,190 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Hervé DUBRIT'
+2024-09-23 15:56:52,211 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_test vide_Hervé DUBRIT.docx
+2024-09-23 15:56:54,229 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_test vide_Hervé DUBRIT.pdf
+2024-09-23 15:56:54,229 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_test vide_Hervé DUBRIT.docx
+2024-09-23 15:56:54,229 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_test vide_Hervé DUBRIT.pdf
+2024-09-23 15:56:54,230 - INFO - 127.0.0.1 - - [23/Sep/2024 15:56:54] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 16:14:29,039 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 16:14:29,040 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000099041,\"vendor_50000227369\":50000917031,\"cost_50000227369\":\"438.0\",\"warranty_50000227369\":24,\"acquisition_date_50000227369\":\"2022-01-01T00:00:00+01:00\",\"warranty_expiry_date_50000227369\":\"2024-01-01T00:00:00+01:00\",\"domain_50000227369\":50000007990,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"FFNDP57DPLJQ\",\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"35 679111 993797 1\",\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "iPhone SE",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:14 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : ""
+}
+2024-09-23 16:14:29,040 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 16:14:29,040 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 16:14:29,062 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000099041,\"vendor_50000227369\":50000917031,\"cost_50000227369\":\"438.0\",\"warranty_50000227369\":24,\"acquisition_date_50000227369\":\"2022-01-01T00:00:00+01:00\",\"warranty_expiry_date_50000227369\":\"2024-01-01T00:00:00+01:00\",\"domain_50000227369\":50000007990,\"asset_state_50000227369\":4,\"serial_number_50000227369\":\"FFNDP57DPLJQ\",\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":\"35 679111 993797 1\",\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
+   "Appareil" : "iPhone SE",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:14 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : ""
+}
+2024-09-23 16:14:29,063 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000099041,"vendor_50000227369":50000917031,"cost_50000227369":"438.0","warranty_50000227369":24,"acquisition_date_50000227369":"2022-01-01T00:00:00+01:00","warranty_expiry_date_50000227369":"2024-01-01T00:00:00+01:00","domain_50000227369":50000007990,"asset_state_50000227369":4,"serial_number_50000227369":"FFNDP57DPLJQ","last_audit_date_50000227369":null,"os_50000227396":null,"numro_de_tlphone_50000227396":null,"os_version_50000227396":null,"memory_50000227396":null,"imei_number_50000227396":"35 679111 993797 1","pin_code_50000227396":null,"puk_code_50000227396":null,"lock_code_50000227396":null}
+2024-09-23 16:14:29,063 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : FFNDP57DPLJQ
+2024-09-23 16:14:29,066 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0..............................'
+2024-09-23 16:14:29,067 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'iPhone SE'
+2024-09-23 16:14:29,068 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'FFNDP57DPLJQ'
+2024-09-23 16:14:29,068 - DEBUG - script.py : Remplacement de '{{IMEI}}' par '35 679111 993797 1'
+2024-09-23 16:14:29,069 - DEBUG - script.py : Remplacement de '{{PIN}}' par '..............................'
+2024-09-23 16:14:29,071 - DEBUG - script.py : Remplacement de '{{PUK}}' par '..............................'
+2024-09-23 16:14:29,072 - DEBUG - script.py : Remplacement de '{{Lock}}' par '..............................'
+2024-09-23 16:14:29,086 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 16:14:29,086 - DEBUG - script.py : Remplacement de '{{Nom}}' par ''
+2024-09-23 16:14:29,124 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Reglement_sortie_Mobile Phone_iPhone SE_.docx
+2024-09-23 16:14:30,830 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Reglement_sortie_Mobile Phone_iPhone SE_.pdf
+2024-09-23 16:14:30,830 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Reglement_sortie_Mobile Phone_iPhone SE_.docx
+2024-09-23 16:14:30,830 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Reglement_sortie_Mobile Phone_iPhone SE_.pdf
+2024-09-23 16:14:30,830 - INFO - 127.0.0.1 - - [23/Sep/2024 16:14:30] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 16:19:11,495 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 16:19:11,496 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000139050,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":50000007990,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"PF4PYLJ2\",\"last_audit_date_50000227369\":\"2024-06-20T13:23:00+02:00\",\"os_50000227374\":\"Microsoft Windows 11 Professionnel\",\"os_version_50000227374\":\"10.0.22631\",\"os_service_pack_50000227374\":\"0.0\",\"memory_50000227374\":\"14.83\",\"disk_space_50000227374\":474,\"cpu_speed_50000227374\":\"2.0\",\"cpu_core_count_50000227374\":6,\"mac_address_50000227374\":\"14:AC:60:77:AF:1D\",\"uuid_50000227374\":\"074A154C-23C1-11B2-A85C-F114D7F93EAF\",\"hostname_50000227374\":\"LAP-ASSET-824\",\"computer_ip_address_50000227374\":\"172.16.51.56\",\"last_login_by_50000227374\":null}",
+   "Appareil" : "LAP-ASSET-824",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Laptop",
+   "Used_by" : ""
+}
+2024-09-23 16:19:11,496 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 16:19:11,496 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 16:19:11,511 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000139050,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":50000007990,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"PF4PYLJ2\",\"last_audit_date_50000227369\":\"2024-06-20T13:23:00+02:00\",\"os_50000227374\":\"Microsoft Windows 11 Professionnel\",\"os_version_50000227374\":\"10.0.22631\",\"os_service_pack_50000227374\":\"0.0\",\"memory_50000227374\":\"14.83\",\"disk_space_50000227374\":474,\"cpu_speed_50000227374\":\"2.0\",\"cpu_core_count_50000227374\":6,\"mac_address_50000227374\":\"14:AC:60:77:AF:1D\",\"uuid_50000227374\":\"074A154C-23C1-11B2-A85C-F114D7F93EAF\",\"hostname_50000227374\":\"LAP-ASSET-824\",\"computer_ip_address_50000227374\":\"172.16.51.56\",\"last_login_by_50000227374\":null}",
+   "Appareil" : "LAP-ASSET-824",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:19 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Laptop",
+   "Used_by" : ""
+}
+2024-09-23 16:19:11,512 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000139050,"vendor_50000227369":null,"cost_50000227369":null,"warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":50000007990,"asset_state_50000227369":1,"serial_number_50000227369":"PF4PYLJ2","last_audit_date_50000227369":"2024-06-20T13:23:00+02:00","os_50000227374":"Microsoft Windows 11 Professionnel","os_version_50000227374":"10.0.22631","os_service_pack_50000227374":"0.0","memory_50000227374":"14.83","disk_space_50000227374":474,"cpu_speed_50000227374":"2.0","cpu_core_count_50000227374":6,"mac_address_50000227374":"14:AC:60:77:AF:1D","uuid_50000227374":"074A154C-23C1-11B2-A85C-F114D7F93EAF","hostname_50000227374":"LAP-ASSET-824","computer_ip_address_50000227374":"172.16.51.56","last_login_by_50000227374":null}
+2024-09-23 16:19:11,512 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : PF4PYLJ2
+2024-09-23 16:19:11,514 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0..............................'
+2024-09-23 16:19:11,517 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'LAP-ASSET-824'
+2024-09-23 16:19:11,518 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'PF4PYLJ2'
+2024-09-23 16:19:11,519 - DEBUG - script.py : Remplacement de '{{IMEI}}' par '..............................'
+2024-09-23 16:19:11,523 - DEBUG - script.py : Remplacement de '{{PIN}}' par '..............................'
+2024-09-23 16:19:11,524 - DEBUG - script.py : Remplacement de '{{PUK}}' par '..............................'
+2024-09-23 16:19:11,525 - DEBUG - script.py : Remplacement de '{{Lock}}' par '..............................'
+2024-09-23 16:19:11,538 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 16:19:11,539 - DEBUG - script.py : Remplacement de '{{Nom}}' par ''
+2024-09-23 16:19:11,561 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Reglement_sortie_Laptop_LAP-ASSET-824_.docx
+2024-09-23 16:19:13,294 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Reglement_sortie_Laptop_LAP-ASSET-824_.pdf
+2024-09-23 16:19:13,294 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Reglement_sortie_Laptop_LAP-ASSET-824_.docx
+2024-09-23 16:19:13,294 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Reglement_sortie_Laptop_LAP-ASSET-824_.pdf
+2024-09-23 16:19:13,295 - INFO - 127.0.0.1 - - [23/Sep/2024 16:19:13] "POST /webhook HTTP/1.1" 200 -
+2024-09-23 16:43:23,025 - DEBUG - ********************************** Start app.py **********************************
+2024-09-23 16:43:23,026 - DEBUG - app.py : Données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Sabrina Vezza",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:43 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "Hervé DUBRIT"
+}
+2024-09-23 16:43:23,026 - DEBUG - ********************************** Start script.py **********************************
+2024-09-23 16:43:23,026 - DEBUG - script.py : Chemin du fichier template : ./templates/template_sortie_materiel.docx
+2024-09-23 16:43:23,033 - DEBUG - script.py : données brutes reçues : {
+   "custom_fields" : "{\"product_50000227369\":50000118307,\"vendor_50000227369\":null,\"cost_50000227369\":\"0.0\",\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":1,\"serial_number_50000227369\":\"SN1234567\",\"last_audit_date_50000227369\":null,\"os_50000227396\":\"iOS 7\",\"numro_de_tlphone_50000227396\":791377081,\"os_version_50000227396\":null,\"memory_50000227396\":\"0\",\"imei_number_50000227396\":\"IMEI123456789012345\",\"pin_code_50000227396\":1234,\"puk_code_50000227396\":\"123456\",\"lock_code_50000227396\":12345}",
+   "Appareil" : "Sabrina Vezza",
+   "Nom" : "",
+   "Date" : "Mon, 23 Sep, 2024 16:43 GMT +0200",
+   "Email_D" : "j-d.ferreira@pro-geneve.ch",
+   "Cl_type" : "Mobile Phone",
+   "Used_by" : "Hervé DUBRIT"
+}
+2024-09-23 16:43:23,033 - DEBUG - script.py : valeur de custom_fields du str en Json : {"product_50000227369":50000118307,"vendor_50000227369":null,"cost_50000227369":"0.0","warranty_50000227369":null,"acquisition_date_50000227369":null,"warranty_expiry_date_50000227369":null,"domain_50000227369":null,"asset_state_50000227369":1,"serial_number_50000227369":"SN1234567","last_audit_date_50000227369":null,"os_50000227396":"iOS 7","numro_de_tlphone_50000227396":791377081,"os_version_50000227396":null,"memory_50000227396":"0","imei_number_50000227396":"IMEI123456789012345","pin_code_50000227396":1234,"puk_code_50000227396":"123456","lock_code_50000227396":12345}
+2024-09-23 16:43:23,033 - DEBUG - script.py : valeur de serial_number_50000227369 du str en Json : SN1234567
+2024-09-23 16:43:23,035 - DEBUG - script.py : Remplacement de '{{Numéro_de_téléphone}}' par '0791377081'
+2024-09-23 16:43:23,038 - DEBUG - script.py : Remplacement de '{{Appareil}}' par 'Sabrina Vezza'
+2024-09-23 16:43:23,039 - DEBUG - script.py : Remplacement de '{{Numéro_de_série}}' par 'SN1234567'
+2024-09-23 16:43:23,040 - DEBUG - script.py : Remplacement de '{{IMEI}}' par 'IMEI123456789012345'
+2024-09-23 16:43:23,041 - DEBUG - script.py : Remplacement de '{{PIN}}' par '1234'
+2024-09-23 16:43:23,042 - DEBUG - script.py : Remplacement de '{{PUK}}' par '123456'
+2024-09-23 16:43:23,042 - DEBUG - script.py : Remplacement de '{{Lock}}' par '12345'
+2024-09-23 16:43:23,049 - DEBUG - script.py : Remplacement de '{{Date}}' par '23.09.2024'
+2024-09-23 16:43:23,049 - DEBUG - script.py : Remplacement de '{{Nom}}' par 'Hervé DUBRIT'
+2024-09-23 16:43:23,062 - DEBUG - script.py : Sauvegarde du document Word modifié : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_Sabrina Vezza_Hervé DUBRIT.docx
+2024-09-23 16:43:24,788 - DEBUG - script.py : Sauvegarde du PDF : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_Sabrina Vezza_Hervé DUBRIT.pdf
+2024-09-23 16:43:24,788 - DEBUG - script.py : Suppression du fichier DOCX modifié : ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_Sabrina Vezza_Hervé DUBRIT.docx
+2024-09-23 16:43:24,788 - INFO - app.py : PDF généré à l'emplacement ./document_finaux/Hervé DUBRIT/Reglement_sortie_Mobile Phone_Sabrina Vezza_Hervé DUBRIT.pdf
+2024-09-23 16:43:24,788 - INFO - 127.0.0.1 - - [23/Sep/2024 16:43:24] "POST /webhook HTTP/1.1" 200 -

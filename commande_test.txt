@@ -1,0 +1,9 @@
+curl -X POST https://8584-195-70-15-188.ngrok-free.app/webhook \`
+`-H "Content-Type: application/json" \`
+`-d '{"custom_fields": {"numro_de_tlphone_50000227396": "1234567890", "serial_number_50000227369": "SN123456", "imei_number_50000227396": "IMEI123456789012345", "pin_code_50000227396": "3548", "puk_code_50000227396": "567890", "lock_code_50000227396": "LOCK1234"}, "Appareil": "Appareil XYZ", "Nom": "Dylan Casal", "Date": "2024-09-03", "Email_D": "example@domain.com", "Cl_type": "Mobile Phone"}
+
+
+curl -X POST https://8584-195-70-15-188.ngrok-free.app/webhook \
+-H "Content-Type: application/json" \
+-d '{"custom_fields": {"product_50000227369":50000099041,"vendor_50000227369":50000757583,"cost_50000227369":"514.12","warranty_50000227369":24,"acquisition_date_50000227369":"2021-08-20T00:00:00+02:00","warranty_expiry_date_50000227369":"2023-08-20T00:00:00+02:00","domain_50000227369":null,"asset_state_50000227369":1,"serial_number_50000227369":"FFMG50GKPLK3","last_audit_date_50000227369":"2021-09-01T00:00:00+02:00","os_50000227396":"iOS 7","numro_de_tlphone_50000227396":765026881,"os_version_50000227396":"14.8","memory_50000227396":"128","imei_number_50000227396":"35923040949668","pin_code_50000227396":4082,"lock_code_50000227396":1234}, "Appareil" : "Sabrina Vezza", "Nom" : "Parvez Sualeheen", "Date" : "Thu, 19 Sep, 2024 11:52 GMT +0200", "Email_D" : "j-d.ferreira@pro-geneve.ch", "Cl_type" : "Mobile Phone"}'
+
