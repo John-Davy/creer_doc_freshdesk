@@ -4,22 +4,16 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
-import re
 
-# Configurer le module de logging
-try:
-    if not os.path.exists('./logs'):
-        os.makedirs('./logs')
-except Exception as e:
-    logging.error(f"script.py : Erreur lors de la création du directory './logs' : {e}")
-    raise
+
+# Définir le chemin du template
+TEMPLATE_PATH_MOBILE_PHONE = './templates/template_recommandations_Mobile_Phone.docx'
+TEMPLATE_PATH_LAPTOP = './templates/template_recommandations_Laptop.docx'
+TEMPLATE_PATH_TABLET = './templates/template_recommandations_Tablet.docx'
+
+
     
-logging.basicConfig(filename='./logs/log_createDoc.txt',
-                    level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
-TEMPLATE_PATH = './templates/template_sortie_materiel.docx'
-
+# Renvoi un nom de fichier unique
 def get_unique_filename(file_path):
     """ Génère un nom de fichier unique en ajoutant un numéro incrémental si nécessaire. """
     base, ext = os.path.splitext(file_path)
@@ -30,176 +24,181 @@ def get_unique_filename(file_path):
         counter += 1
     return new_file_path
     
-# Fonction de formatage de la date
 def format_date(date_str):
     """ Convertit une date en chaîne au format 'DD.MM.YYYY' ou retourne une valeur par défaut """
     try:
-        date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')  # Format que vous recevez
-        return date_obj.strftime('%d.%m.%Y')  # Format désiré pour le document
+        date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')
+        return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
-        logging.error(f"script.py : Erreur de formatage de la date : {e}")
-        return '..............................'  # Valeur par défaut si la conversion échoue
+        logging.error(f"script.py :\n Erreur de formatage de la date : {e}", exc_info=True)
+        return (datetime.now()).strftime("%d.%m.%Y")
 
-# Fonction pour convertir les données en JSON
 def clean_data(data_string):
     try:
-        # Nettoyage de la chaîne JSON brute
-        cleaned_data = data_string.replace('\\"', '"')  # Remplacer les guillemets échappés
-        logging.debug(f"script.py : Données nettoyées : {cleaned_data}")
+        cleaned_data = data_string.replace('\"', '"')
+        logging.debug(f"script.py :\n Données nettoyées : {cleaned_data}")
+        return cleaned_data
     except Exception as e:
-        logging.error(f"script.py : Erreur lors de la conversion des données en JSON : {e}")
+        logging.error(f"script.py :\n Erreur lors du nettoyage des données : {e}", exc_info=True)
         return None
-    return cleaned_data
-    
+
 def open_doc(doc_path):
-    # Charger le document Word
-    if not os.path.isfile(doc_path):
-        logging.error(f"script.py : Le fichier template n'existe pas à l'emplacement : {doc_path}")
-        return
-
     try:
+        if not os.path.isfile(doc_path):
+            raise FileNotFoundError(f"Le fichier template n'existe pas à l'emplacement : {doc_path}")
         doc = Document(doc_path)
+        return doc
     except Exception as e:
-        logging.error(f"script.py : Erreur lors du chargement du document : {e}")
+        logging.error(f"script.py :\n Erreur lors du chargement du document : {e}", exc_info=True)
         raise
 
-    return doc
-    
-def create_json(raw_data, key):
-    data = json.loads(raw_data)
+def create_json(raw_data):
     try:
-        value = data.get(key)
-        logging.debug(f"script.py : valeur de {key} du str en Json : {value}")    
-    except Exception as e:
-        logging.error(f"script.py : Erreur lors de la lecture {key} comme valeur Json : {e}")
+        data = json.loads(raw_data)
+    except json.JSONDecodeError as e:
+        logging.error(f"script.py :\n Erreur lors du parsing du JSON : {e}", exc_info=True)
         raise
-        
-    # Créer dossier si inexistant
+    except Exception as e:
+        logging.error(f"script.py :\n Erreur lors de l'obtention du JSON : {e}", exc_info=True)
+        raise
+    
+    return data
+
 def create_dir(path):
     try:
         if not os.path.exists(path):
             os.makedirs(path)
     except Exception as e:
-        logging.error(f"script.py : Erreur lors de la création du directory {path} : {e}")
+        logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
         raise
-
-
-def replace_placeholders(doc_path, raw_data):
-    logging.debug("********************************** Start script.py **********************************")
-    logging.debug(f"script.py : Chemin du fichier template : {doc_path}")    
-    
-    # Ouvre le document template
-    doc = open_doc(doc_path)
         
-    # logger de la chaîne brute
-    logging.debug(f"script.py : données brutes reçues : {raw_data}")
+def definir_doc_path(cl_type):
+    return (
+            TEMPLATE_PATH_MOBILE_PHONE if cl_type == 'Mobile Phone' else
+            TEMPLATE_PATH_LAPTOP if cl_type == 'Laptop' else
+            TEMPLATE_PATH_TABLET if cl_type == 'Tablet' else
+            ValueError('Le type d\'actif n\'est pas géré par ce script')
+        )
+        
+def create_plaecholders(cl_type, data, custom_fields):
     
-    # création des données Json
-    # try :
-    create_json(raw_data, "custom_fields")
-    data = json.loads(raw_data)
-    custom_fields_str = data.get("custom_fields")
-    create_json(custom_fields_str, "serial_number_50000227369")
-    custom_fields = json.loads(custom_fields_str)
-    #except Exception as e:
-    #    logging.error(f"script.py : Erreur lors de la création des données Json : {e}")
-    #    raise
+    logging.debug("""
+        *********************************************************************************************************
+                ********************************** Start script.py **********************************
+        ********************************************************************************************************* """)
+        
+    if cl_type == 'Mobile Phone' :
+        placeholders = {
+            '{{Numéro_de_téléphone}}': '0' + str(
+                custom_fields.get('numro_de_tlphone_50000227396', '..............................') or '..............................'),
+            '{{Numéro_de_série}}': (
+                custom_fields.get('serial_number_50000227369', '..............................') or '..............................'),
+            '{{IMEI}}': (
+                custom_fields.get('imei_number_50000227396', '..............................') or '..............................'),
+            '{{PIN}}': (
+                custom_fields.get('pin_code_50000227396', '..............................') or '..............................'),
+            '{{PUK}}': (
+                custom_fields.get('puk_code_50000227396', '..............................') or '..............................'),
+            '{{Lock}}': (
+                custom_fields.get('lock_code_50000227396', '..............................') or '..............................')
+        }
+    elif cl_type == 'Laptop' :
+    # TODO gérer les données nécessaires pour la feuille de mat. intallé
+        placeholders = {
+            '{{Numéro_de_série}}': (
+                custom_fields.get('serial_number_50000227369', '..............................') or '..............................')
+        }
+    elif cl_type == 'Tablet' :
+    # TODO gérer les tablette
+        placeholders = {
+            '{{Numéro_de_série}}': (
+                custom_fields.get('serial_number_50000227369', '..............................') or '..............................')
+        }
+    else :
+        raise ValueError("le type d'actif reçu n'est pas géré par ce scritp")
+        
+    placeholders["{{Date}}"] = format_date(str(data.get('Date', 'date_is_None'))) or format_date(str(datetime.now()))
+    placeholders["{{Nom}}"] = data.get('Used_by', 'user_is_None') or 'Aucun_utilisateur'
+    placeholders["{{Appareil}}"] = data.get('Appareil', 'nom_appareil_is_None') or 'appareil ......'    
+        
+    return placeholders
 
-    # Récupérer les données custom_fields
-    num_tel = custom_fields.get('numro_de_tlphone_50000227396', '..............................') or '..............................'
-    num_serie = custom_fields.get('serial_number_50000227369', '..............................') or '..............................'
-    imei = custom_fields.get('imei_number_50000227396', '..............................') or '..............................'
-    pin = custom_fields.get('pin_code_50000227396', '..............................') or '..............................'
-    puk = custom_fields.get('puk_code_50000227396', '..............................') or '..............................'
-    lock_code = custom_fields.get('lock_code_50000227396', '..............................') or '..............................'
+def replace_placeholders(raw_data):
     
-    # Récupérer les données data
-    nom = data.get('Used_by', '..............................')
-    appareil = data.get('Appareil', '..............................')
-    date = format_date(data.get('Date', '..............................'))
-    cl_type = data.get('Cl_type', 'Inconnu')  
-    
-    # définir nom de dossier
-    nom_dossier = str(nom)
-
-    # Charger et remplacer les placeholders dans le document Word
-    placeholders = {
-        '{{Numéro_de_téléphone}}': '0' + str(num_tel),
-        '{{Numéro_de_série}}': num_serie,
-        '{{IMEI}}': imei,
-        '{{PIN}}': pin,
-        '{{PUK}}': puk,
-        '{{Lock}}': lock_code,
-        '{{Date}}': date,
-        '{{Nom}}': nom,
-        '{{Appareil}}': appareil
-    }
-
-    # Créer dossier documents finaux si inexistant
-    final_dir = './document_finaux'
-    create_dir(final_dir)
-
-    # Créer dossier collaborateur si inexistant
-    dossier_nom = os.path.join(final_dir, nom_dossier)
-    create_dir(dossier_nom)
-
-    # Construire les noms de fichiers en utilisant les valeurs obtenues
-    docx_path = os.path.join(dossier_nom, f'Reglement_sortie_{cl_type}_{appareil}_{nom_dossier}.docx')
-    docx_path = get_unique_filename(docx_path)
-    pdf_path = os.path.join(dossier_nom, f'Reglement_sortie_{cl_type}_{appareil}_{nom_dossier}.pdf')
-    pdf_path = get_unique_filename(pdf_path)
-    
-    # Remplacement des placeholders dans le document Word
-    for paragraph in doc.paragraphs:
-        for placeholder, value in placeholders.items():
-            if placeholder in paragraph.text:
-                logging.debug(f"script.py : Remplacement de '{placeholder}' par '{value}'")
-                paragraph.text = paragraph.text.replace(placeholder, str(value))
-
-    # Sauvegarder le document modifié en .docx
     try:
-        doc.save(docx_path)
-        logging.debug(f'script.py : Sauvegarde du document Word modifié : {docx_path}')
+        # **********************************************************************************************************
+        #            *************************** Initialisation des données *****************************
+        # **********************************************************************************************************
+        
+        # création des JSON
+        data = create_json(raw_data)
+        custom_fields = create_json(data.get("custom_fields"))
+            
+        # récupère le type d'actif
+        cl_type = data.get('Cl_type', 'Cl_type_is_None') or 'type_inconnu'
+      
+        # définir doc_path le chemin du fichier template à remplir
+        doc_path = definir_doc_path(cl_type)
+        
+        # créer les champs à insérer dans le doc
+        placeholders = create_plaecholders(cl_type, data, custom_fields)
+        
+        # **********************************************************************************************************
+        #            *************************** Modification du document *****************************
+        # **********************************************************************************************************
+        
+        # ouvrir doc template
+        doc = open_doc(doc_path)
+        
+        # créer les dossiers de destination
+        create_dir('./documents_finaux')
+        create_dir(os.path.join('./documents_finaux', placeholders["{{Nom}}"]))
+        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Nom}}"])
+
+        # TODO: vérifier si besoin des 2 path
+        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.docx'))
+        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.pdf'))
+
+        for paragraph in doc.paragraphs:
+            for placeholder, value in placeholders.items():
+                if placeholder in paragraph.text:
+                    logging.debug(f"script.py :\n Remplacement de '{placeholder}' par '{value}'")
+                    paragraph.text = paragraph.text.replace(placeholder, str(value))
+
+        try:
+            doc.save(docx_path)
+            logging.debug(f'script.py :\n Sauvegarde du document Word modifié :\n {docx_path}')
+        except Exception as e:
+            logging.error(f"script.py :\n Erreur lors de la sauvegarde du document Word :\n {e}", exc_info=True)
+            raise
+
+        try:
+            result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
+            if result.returncode != 0:
+                raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
+            pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
+            logging.debug(f"valeur de pdf_generated_filename :\n {pdf_generated_filename}")
+            pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
+            logging.debug(f"valeur de pdf_generated_path :\n {pdf_generated_path}")
+            logging.debug(f"valeur de pdf_path :\n {pdf_path}")
+            if os.path.exists(pdf_generated_path):
+                os.rename(pdf_generated_path, pdf_path)
+                logging.debug(f'script.py :\n PDF sauvegardé à :\n {pdf_path}')
+            else:
+                raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
+        except Exception as e:
+            logging.error(f"script.py :\n Erreur lors de la conversion du document Word en PDF : {e}", exc_info=True)
+            
+
+        try:
+            if os.path.isfile(docx_path):
+                os.remove(docx_path)
+                logging.debug(f'script.py :\n Suppression du fichier DOCX : {docx_path}')
+        except Exception as e:
+            logging.error(f"script.py :\n Erreur lors de la suppression du fichier DOCX : {e}", exc_info=True)
+
     except Exception as e:
-        logging.error(f"script.py : Erreur lors de la sauvegarde du document Word : {e}")
-        raise
+        logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
+        
 
-    # Convertir le document Word modifié en PDF avec LibreOffice
-    try:
-        # Convertir le fichier DOCX en PDF
-        result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path],
-                                capture_output=True, text=True)
-        if result.returncode != 0:
-            logging.error(f"script.py : Erreur lors de la conversion du document Word en PDF : {result.stderr}")
-            return
-
-        # Déplacer le fichier PDF généré au bon endroit
-        pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
-        pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
-        if os.path.exists(pdf_generated_path):
-            os.rename(pdf_generated_path, pdf_path)
-            logging.debug(f'script.py : Sauvegarde du PDF : {pdf_path}')
-        else:
-            logging.error(f"script.py : Le fichier PDF généré n'existe pas : {pdf_generated_path}")
-
-    except Exception as e:
-        logging.error(f"script.py : Erreur lors de la conversion du document Word en PDF : {e}")
-        raise
-
-    # Supprimer le fichier DOCX modifié après la conversion en PDF
-    try:
-        if os.path.isfile(docx_path):
-            os.remove(docx_path)
-            logging.debug(f'script.py : Suppression du fichier DOCX modifié : {docx_path}')
-    except Exception as e:
-        logging.error(f"script.py : Erreur lors de la suppression du fichier DOCX : {e}")
-        raise
-
-    return pdf_path
-
-# Code de test placé sous la condition __main__
 if __name__ == '__main__':
-
-    #pdf_path = replace_placeholders(TEMPLATE_PATH, data)
-    print(f"script.py : PDF généré à l'emplacement {pdf_path}")
-
