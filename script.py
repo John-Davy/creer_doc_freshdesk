@@ -34,6 +34,7 @@ def format_date(date_str):
         return (datetime.now()).strftime("%d.%m.%Y")
 
 def clean_data(data_string):
+    """ Nettoie les données reçues par Freshdesk remplace les \" par " """
     try:
         cleaned_data = data_string.replace('\"', '"')
         logging.debug(f"script.py :\n Données nettoyées : {cleaned_data}")
@@ -43,6 +44,7 @@ def clean_data(data_string):
         return None
 
 def open_doc(doc_path):
+    """ Crée une instance du template et la renvoie """
     try:
         if not os.path.isfile(doc_path):
             raise FileNotFoundError(f"Le fichier template n'existe pas à l'emplacement : {doc_path}")
@@ -53,6 +55,7 @@ def open_doc(doc_path):
         raise
 
 def create_json(raw_data):
+    """ Converti la chaine de caractère et renvoie un object JSON """
     try:
         data = json.loads(raw_data)
     except json.JSONDecodeError as e:
@@ -65,6 +68,7 @@ def create_json(raw_data):
     return data
 
 def create_dir(path):
+    """ Crée de répertoire si inexistant """
     try:
         if not os.path.exists(path):
             os.makedirs(path)
@@ -73,6 +77,7 @@ def create_dir(path):
         raise
         
 def definir_doc_path(cl_type):
+    """ Défini le template à utiliser selon le type d'actif """
     return (
             TEMPLATE_PATH_MOBILE_PHONE if cl_type == 'Mobile Phone' else
             TEMPLATE_PATH_LAPTOP if cl_type == 'Laptop' else
@@ -81,6 +86,7 @@ def definir_doc_path(cl_type):
         )
         
 def create_plaecholders(cl_type, data, custom_fields):
+    """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
     
     logging.debug("""
         *********************************************************************************************************
@@ -124,6 +130,7 @@ def create_plaecholders(cl_type, data, custom_fields):
     return placeholders
 
 def replace_placeholders(raw_data):
+    """ Remplace les données dans le document template, modifie son nom, et l'enregistre au bon endroit """
     
     try:
         # **********************************************************************************************************
@@ -162,43 +169,27 @@ def replace_placeholders(raw_data):
         for paragraph in doc.paragraphs:
             for placeholder, value in placeholders.items():
                 if placeholder in paragraph.text:
-                    logging.debug(f"script.py :\n Remplacement de '{placeholder}' par '{value}'")
                     paragraph.text = paragraph.text.replace(placeholder, str(value))
 
-        try:
-            doc.save(docx_path)
-            logging.debug(f'script.py :\n Sauvegarde du document Word modifié :\n {docx_path}')
-        except Exception as e:
-            logging.error(f"script.py :\n Erreur lors de la sauvegarde du document Word :\n {e}", exc_info=True)
-            raise
+        doc.save(docx_path)
 
-        try:
-            result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
-            if result.returncode != 0:
-                raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
-            pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
-            logging.debug(f"valeur de pdf_generated_filename :\n {pdf_generated_filename}")
-            pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
-            logging.debug(f"valeur de pdf_generated_path :\n {pdf_generated_path}")
-            logging.debug(f"valeur de pdf_path :\n {pdf_path}")
-            if os.path.exists(pdf_generated_path):
-                os.rename(pdf_generated_path, pdf_path)
-                logging.debug(f'script.py :\n PDF sauvegardé à :\n {pdf_path}')
-            else:
-                raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
-        except Exception as e:
-            logging.error(f"script.py :\n Erreur lors de la conversion du document Word en PDF : {e}", exc_info=True)
+
+        result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
+        if result.returncode != 0:
+            raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
+        pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
+        pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
+        if os.path.exists(pdf_generated_path):
+            os.rename(pdf_generated_path, pdf_path)
+        else:
+            raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
             
-
-        try:
-            if os.path.isfile(docx_path):
-                os.remove(docx_path)
-                logging.debug(f'script.py :\n Suppression du fichier DOCX : {docx_path}')
-        except Exception as e:
-            logging.error(f"script.py :\n Erreur lors de la suppression du fichier DOCX : {e}", exc_info=True)
+        if os.path.isfile(docx_path):
+            os.remove(docx_path)
 
     except Exception as e:
         logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
         
 
 if __name__ == '__main__':
+    logging.info("************** MAIN START ****************")
