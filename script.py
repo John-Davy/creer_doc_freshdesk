@@ -4,14 +4,17 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
+from logging.handlers import RotatingFileHandler
 
-
-# Définir le chemin du template
-TEMPLATE_PATH_MOBILE_PHONE = './templates/template_recommandations_Mobile_Phone.docx'
-TEMPLATE_PATH_LAPTOP = './templates/template_recommandations_Laptop.docx'
-TEMPLATE_PATH_TABLET = './templates/template_recommandations_Tablet.docx'
-
-
+# Chemins vers les différents templates en fonction du type d'actif
+try:
+    TEMPLATES = {
+        'Mobile Phone': './templates/template_recommandations_Mobile_Phone.docx',
+        'Laptop': './templates/template_recommandations_Laptop.docx',
+        'Tablet': './templates/template_recommandations_Tablet.docx'
+    }
+except ValueError as e:
+    logging.error(f"Le type d'actif envoyé n'est pas pris en charge !")
     
 # Renvoi un nom de fichier unique
 def get_unique_filename(file_path):
@@ -30,166 +33,121 @@ def format_date(date_str):
         date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')
         return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
-        logging.error(f"script.py :\n Erreur de formatage de la date : {e}", exc_info=True)
+        logging.error(f"script.py : Mauvais format de date !")
         return (datetime.now()).strftime("%d.%m.%Y")
-
-def clean_data(data_string):
-    """ Nettoie les données reçues par Freshdesk remplace les \" par " """
-    try:
-        cleaned_data = data_string.replace('\"', '"')
-        logging.debug(f"script.py :\n Données nettoyées : {cleaned_data}")
-        return cleaned_data
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur lors du nettoyage des données : {e}", exc_info=True)
-        return None
 
 def open_doc(doc_path):
     """ Crée une instance du template et la renvoie """
-    try:
-        if not os.path.isfile(doc_path):
-            raise FileNotFoundError(f"Le fichier template n'existe pas à l'emplacement : {doc_path}")
-        doc = Document(doc_path)
-        return doc
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur lors du chargement du document : {e}", exc_info=True)
-        raise
+    if not os.path.isfile(doc_path):
+        raise FileNotFoundError(f"Le fichier template n'existe pas à l'emplacement : {doc_path}")
+    doc = Document(doc_path)
+    return doc
 
 def create_json(raw_data):
     """ Converti la chaine de caractère et renvoie un object JSON """
-    try:
-        data = json.loads(raw_data)
-    except json.JSONDecodeError as e:
-        logging.error(f"script.py :\n Erreur lors du parsing du JSON : {e}", exc_info=True)
-        raise
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur lors de l'obtention du JSON : {e}", exc_info=True)
-        raise
-    
+    data = json.loads(str(raw_data))
     return data
-
+        
 def create_dir(path):
     """ Crée de répertoire si inexistant """
-    try:
-        if not os.path.exists(path):
-            os.makedirs(path)
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
-        raise
+    if not os.path.exists(path):
+        os.makedirs(path)
         
-def definir_doc_path(cl_type):
-    """ Défini le template à utiliser selon le type d'actif """
-    return (
-            TEMPLATE_PATH_MOBILE_PHONE if cl_type == 'Mobile Phone' else
-            TEMPLATE_PATH_LAPTOP if cl_type == 'Laptop' else
-            TEMPLATE_PATH_TABLET if cl_type == 'Tablet' else
-            ValueError('Le type d\'actif n\'est pas géré par ce script')
-        )
         
 def create_plaecholders(cl_type, data, custom_fields):
-    """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
+    """ Crée le dictionnaire avec les bonnes clés et valeurs pour remplir le doc """
+    logging.debug("""********************************** Start script.py **********************************""")
     
-    logging.debug("""
-        *********************************************************************************************************
-                ********************************** Start script.py **********************************
-        ********************************************************************************************************* """)
-        
     if cl_type == 'Mobile Phone' :
         placeholders = {
             '{{Numéro_de_téléphone}}': '0' + str(
-                custom_fields.get('numro_de_tlphone_50000227396', '..............................') or '..............................'),
+                custom_fields.get('numro_de_tlphone_50000227396') or '..............................'),
             '{{Numéro_de_série}}': (
-                custom_fields.get('serial_number_50000227369', '..............................') or '..............................'),
+                custom_fields.get('serial_number_50000227369') or '..............................'),
             '{{IMEI}}': (
-                custom_fields.get('imei_number_50000227396', '..............................') or '..............................'),
+                custom_fields.get('imei_number_50000227396') or '..............................'),
             '{{PIN}}': (
-                custom_fields.get('pin_code_50000227396', '..............................') or '..............................'),
+                custom_fields.get('pin_code_50000227396') or '..............................'),
             '{{PUK}}': (
-                custom_fields.get('puk_code_50000227396', '..............................') or '..............................'),
+                custom_fields.get('puk_code_50000227396') or '..............................'),
             '{{Lock}}': (
-                custom_fields.get('lock_code_50000227396', '..............................') or '..............................')
+                custom_fields.get('lock_code_50000227396') or '..............................')
         }
-    elif cl_type == 'Laptop' :
-    # TODO gérer les données nécessaires pour la feuille de mat. intallé
+    elif cl_type == 'Laptop' or 'Tablet' :
         placeholders = {
             '{{Numéro_de_série}}': (
-                custom_fields.get('serial_number_50000227369', '..............................') or '..............................')
-        }
-    elif cl_type == 'Tablet' :
-    # TODO gérer les tablette
-        placeholders = {
-            '{{Numéro_de_série}}': (
-                custom_fields.get('serial_number_50000227369', '..............................') or '..............................')
+                custom_fields.get('serial_number_50000227369') or '..............................')
         }
     else :
         raise ValueError("le type d'actif reçu n'est pas géré par ce scritp")
         
-    placeholders["{{Date}}"] = format_date(str(data.get('Date', 'date_is_None'))) or format_date(str(datetime.now()))
-    placeholders["{{Nom}}"] = data.get('Used_by', 'user_is_None') or 'Aucun_utilisateur'
-    placeholders["{{Appareil}}"] = data.get('Appareil', 'nom_appareil_is_None') or 'appareil ......'    
+    placeholders["{{Date}}"] = format_date(str(data.get('Date'))) or format_date(str(datetime.now()))
+    placeholders["{{Appareil}}"] = data.get('Appareil') or '.............................'    
+    
+    if data.get('Used_by') not in [None, ""]:
+        placeholders["{{Nom}}"] = data.get('Used_by')
+    else:
+        raise ValueError("l'actif n'est pas attribué à une utilisateur !")
         
     return placeholders
 
 def replace_placeholders(raw_data):
     """ Remplace les données dans le document template, modifie son nom, et l'enregistre au bon endroit """
+    # création des JSON
+    data = create_json(raw_data)
+    custom_fields = create_json(data.get("custom_fields"))
+        
+    # récupère le type d'actif
+    cl_type = data.get('Cl_type', 'Cl_type_is_None') or 'type_inconnu'
+    if cl_type not in ["Tablet", "Laptop", "Mobile Phone"]:
+        return "Type d'actif n'est pas pris en charge", 500
+  
+    # définir le template a utiliser
+    doc_path = TEMPLATES[cl_type]
+    doc = open_doc(doc_path)
     
-    try:
-        # **********************************************************************************************************
-        #            *************************** Initialisation des données *****************************
-        # **********************************************************************************************************
-        
-        # création des JSON
-        data = create_json(raw_data)
-        custom_fields = create_json(data.get("custom_fields"))
-            
-        # récupère le type d'actif
-        cl_type = data.get('Cl_type', 'Cl_type_is_None') or 'type_inconnu'
-      
-        # définir doc_path le chemin du fichier template à remplir
-        doc_path = definir_doc_path(cl_type)
-        
-        # créer les champs à insérer dans le doc
-        placeholders = create_plaecholders(cl_type, data, custom_fields)
-        
-        # **********************************************************************************************************
-        #            *************************** Modification du document *****************************
-        # **********************************************************************************************************
-        
-        # ouvrir doc template
-        doc = open_doc(doc_path)
-        
-        # créer les dossiers de destination
-        create_dir('./documents_finaux')
-        create_dir(os.path.join('./documents_finaux', placeholders["{{Nom}}"]))
-        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Nom}}"])
+    # créer les champs à insérer dans le doc
+    placeholders = create_plaecholders(cl_type, data, custom_fields)
+    
+    # créer les dossiers de destination
+    create_dir('./documents_finaux')
+    dossier_nom = os.path.join('./documents_finaux', placeholders["{{Nom}}"])
+    create_dir(dossier_nom)
 
-        # TODO: vérifier si besoin des 2 path
-        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.docx'))
-        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.pdf'))
+    # Défini nom fichier unique
+    docx_path = os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.docx')
+    pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.pdf'))
 
-        for paragraph in doc.paragraphs:
-            for placeholder, value in placeholders.items():
-                if placeholder in paragraph.text:
-                    paragraph.text = paragraph.text.replace(placeholder, str(value))
+    # **********************************************************************************************************
+    #            *************************** Modification du document *****************************
+    # **********************************************************************************************************
+    
+    # Remplacer les placeholders dans le document
+    for paragraph in doc.paragraphs:
+        for placeholder, value in placeholders.items():
+            if placeholder in paragraph.text:
+                paragraph.text = paragraph.text.replace(placeholder, str(value))
+                logging.debug(f"script.py : placeholder: {placeholder} est remplacé par {str(value)} !")
 
-        doc.save(docx_path)
+    doc.save(docx_path)
 
-
-        result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
-        if result.returncode != 0:
-            raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
-        pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
-        pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
-        if os.path.exists(pdf_generated_path):
+    # Convertir en PDF
+    result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
+    
+    # Définir le chemin final du .pdf
+    pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
+    pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
+    
+    # Effacer le .docx temporaire
+    if os.path.isfile(docx_path):
+        os.remove(docx_path)
+        
+    # Déplacer le fichier .pdf
+    if os.path.exists(pdf_generated_path):
             os.rename(pdf_generated_path, pdf_path)
-        else:
-            raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
-            
-        if os.path.isfile(docx_path):
-            os.remove(docx_path)
-
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
-        
+            return True
+    else:
+        raise FileNotFoundError(f"Le fichier PDF généré n'existe pas : {pdf_generated_path}")
 
 if __name__ == '__main__':
-    logging.info("************** MAIN START ****************")
+    logging.debug("************** MAIN START ****************")
