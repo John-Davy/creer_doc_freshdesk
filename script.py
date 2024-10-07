@@ -154,6 +154,11 @@ def replace_placeholders(raw_data):
         # Effacer le .docx
         if os.path.isfile(docx_path):
             os.remove(docx_path)
+            
+        if os.path.exists(pdf_path) :
+            return pdf_path, 200
+        else :
+            return ValueError, 500
 
     except Exception as e:
         logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)

@@ -1,7 +1,7 @@
 from flask import Flask, request
 import logging
 import os
-from script import replace_placeholders, TEMPLATES
+from script import replace_placeholders
 
 # Initialiser l'application Flask
 app = Flask(__name__)
@@ -12,7 +12,7 @@ def init_logging():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    logging.basicConfig(filename=os.path.join(log_dir, 'app.log'),
+    logging.basicConfig(filename=os.path.join(log_dir, 'log.txt'),
                         level=logging.DEBUG,
                         format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -21,18 +21,9 @@ init_logging()
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
-    if data is None:
-        logging.error('Aucune donnée JSON reçue')
-        return 'Aucune donnée JSON reçue', 400
 
     try:
-        cl_type = data.get('Cl_type', 'Unknown')
-        if cl_type not in TEMPLATES:
-            logging.error(f'Type d\'actif non supporté : {cl_type}')
-            return 'Type d\'actif non supporté', 400
-
-        template_path = TEMPLATES[cl_type]
-        pdf_path = replace_placeholders(cl_type, template_path, data)
+        pdf_path = replace_placeholders(data)
 
         if pdf_path:
             logging.info(f'PDF généré avec succès : {pdf_path}')
