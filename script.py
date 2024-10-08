@@ -61,12 +61,37 @@ def create_dir(path):
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
         raise # Propager l'exception pour app.py
+        
+def init_palceholders(data, custom_fields):
+    placeholders = {}
+    
+    # gestion dela date
+    date = str(data.get('Date'))
+    date = format_date(date)
+    placeholders["{{Date}}"] = date
+    
+    # valeurs obligatoires
+    requiered_values = {
+        "{{Used_by}}" : data.get("Used_by"),
+        "{{Asset_tag}}" : data.get("Asset_tag"), 
+        "{{Numéro_de_série}}" : custom_fields.get("serial_number_50000227369")
+    }
+    
+    for key, value in requiered_values.items():
+        if value not in [ None, ""] :
+            placeholders[key] = value
+        else :
+            raise ValueError(f"La variable {key} n'a pas de valeur = {key} = {value} !")
+            
+    return placeholders
 
 def create_placeholders(cl_type, data, custom_fields):
     """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
-    placeholders = {}
+    placeholders = init_palceholders(data, custom_fields)
+    
+    # gerer les champs spécifiques si l'actif est un Mobile Phone
     if cl_type == 'Mobile Phone' :
-        placeholders = {
+        dic = {
             '{{Numéro_de_téléphone}}': '0' + str(
                 custom_fields.get('numro_de_tlphone_50000227396', '.....................') or '.....................'),
             '{{IMEI}}': (
@@ -78,17 +103,10 @@ def create_placeholders(cl_type, data, custom_fields):
             '{{Lock}}': (
                 custom_fields.get('lock_code_50000227396', '.....................') or '.....................')
         }
+        for key, value in dic.items():
+            placeholders[key] = value
     elif cl_type not in ['Tablet', 'Laptop']:
-        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")
-    
-    date = str(data.get('Date'))
-    date = format_date(date)
-    placeholders["{{Date}}"] = date
-    placeholders["{{Nom}}"] = data.get('Used_by', '.....................') or '.....................'
-    placeholders["{{Appareil}}"] = data.get('Appareil', '.....................') or '.....................' 
-    
-    placeholders["{{Numéro_de_série}}"] = custom_fields.get('serial_number_50000227369', '.....................') or '.....................'
-        
+        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")        
     return placeholders
 
 def replace_placeholders(raw_data):
@@ -110,17 +128,18 @@ def replace_placeholders(raw_data):
           
         # créer les champs à insérer dans le doc
         placeholders = create_placeholders(cl_type, data, custom_fields)
+        logging.debug(f"Afficher palceholders : {placeholders}")
 
         # ouvrir doc template pour pouvoir le modifier
         doc = open_doc(doc_path)
         
         # créer les dossiers de destination du fichier rempli
         create_dir('./documents_finaux')
-        create_dir(os.path.join('./documents_finaux', placeholders["{{Nom}}"]))
-        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Nom}}"])
+        create_dir(os.path.join('./documents_finaux', placeholders["{{Used_by}}"]))
+        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Used_by}}"])
 
-        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.docx'))
-        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Appareil}}"]}_{placeholders["{{Nom}}"]}.pdf'))
+        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.docx'))
+        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.pdf'))
 
         for paragraph in doc.paragraphs:
             for placeholder, value in placeholders.items():
