@@ -24,7 +24,6 @@ app = Flask(__name__)
 # Définir la route pour le webhook
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    
     # crée le dossier des logs si inexistant
     try:
         if not os.path.exists('./logs'):
