@@ -27,8 +27,8 @@ def format_date(date_str):
         date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')
         return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
-        logging.error(f"script.py :\n Erreur de formatage de la date : {e}", exc_info=True)
-        return (datetime.now()).strftime("%d.%m.%Y")
+        logging.error(f"script.py : Erreur de formatage de la date : {e}", exc_info=True)
+        return str(datetime.now().strftime('%d.%m.%Y'))
 
 def open_doc(doc_path):
     """ Crée une instance du template et la renvoie """
@@ -39,7 +39,7 @@ def open_doc(doc_path):
         return doc
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors du chargement du document : {e}", exc_info=True)
-        raise
+        raise # Propager l'exception pour app.py
 
 def create_json(raw_data):
     """ Converti la chaine de caractère et renvoie un object JSON """
@@ -47,11 +47,10 @@ def create_json(raw_data):
         data = json.loads(raw_data)
     except json.JSONDecodeError as e:
         logging.error(f"script.py :\n Erreur lors du parsing du JSON : {e}", exc_info=True)
-        raise
+        raise # Propager l'exception pour app.py
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors de l'obtention du JSON : {e}", exc_info=True)
-        raise
-    
+        raise # Propager l'exception pour app.py
     return data
     
 def create_dir(path):
@@ -61,7 +60,7 @@ def create_dir(path):
             os.makedirs(path)
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
-        raise
+        raise # Propager l'exception pour app.py
 
 def create_placeholders(cl_type, data, custom_fields):
     """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
@@ -79,11 +78,12 @@ def create_placeholders(cl_type, data, custom_fields):
             '{{Lock}}': (
                 custom_fields.get('lock_code_50000227396', '.....................') or '.....................')
         }
-    elif cl_type not in ['Tablet', 'Laptop', 'Mobile Phone']:
+    elif cl_type not in ['Tablet', 'Laptop']:
         raise ValueError("Le type d'actif reçu n'est pas géré par ce script")
     
-    
-    placeholders["{{Date}}"] = format_date(str(data.get('Date', 'date_is_None'))) or format_date(str(datetime.now()))
+    date = str(data.get('Date'))
+    date = format_date(date)
+    placeholders["{{Date}}"] = date
     placeholders["{{Nom}}"] = data.get('Used_by', '.....................') or '.....................'
     placeholders["{{Appareil}}"] = data.get('Appareil', '.....................') or '.....................' 
     
@@ -126,6 +126,7 @@ def replace_placeholders(raw_data):
             for placeholder, value in placeholders.items():
                 if placeholder in paragraph.text:
                     paragraph.text = paragraph.text.replace(placeholder, str(value))
+                    logging.debug(f"remplacement :\t {placeholder} ................ {str(value)}")
 
         doc.save(docx_path)
 
@@ -150,6 +151,7 @@ def replace_placeholders(raw_data):
 
     except Exception as e:
         logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
+        raise # Propager l'exception pour app.py
         
 if __name__ == '__main__':
     logging.info("************** MAIN START ****************")

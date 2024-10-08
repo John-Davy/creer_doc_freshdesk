@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 import logging
 from logging.handlers import RotatingFileHandler
 from script import replace_placeholders
-import json
-import re
 import os
+
+API_KEY = 'jkGhphxMKSTd6UowRta' # clé API freshdesk
 
 # Vérification et création du dossier de logs
 logs_directory = './logs'
@@ -18,6 +18,9 @@ logging.basicConfig(handlers=[log_handler],
                     level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Initialisation de l'indicateur d'erreur
+errors_occurred = False
+
 # Créer l'objet Flask
 app = Flask(__name__)
 
@@ -28,7 +31,6 @@ def webhook():
     *********************************************************************************************************
                ********************************** Start app.py **********************************
     *********************************************************************************************************""")
-    
     # Récupérer les données brutes envoyées par Freshdesk
     try:
         raw_data = request.data.decode('utf-8')  # Récupère les données brutes
