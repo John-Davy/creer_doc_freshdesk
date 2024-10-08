@@ -5,14 +5,11 @@ from datetime import datetime
 import subprocess
 import json
 
-
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
             "Laptop" : './templates/template_recommandations_Laptop.docx',
             "Tablet" : './templates/template_recommandations_Tablet.docx'}
 
-
-    
 # Renvoi un nom de fichier unique
 def get_unique_filename(file_path):
     """ Génère un nom de fichier unique en ajoutant un numéro incrémental si nécessaire. """
@@ -32,8 +29,6 @@ def format_date(date_str):
     except ValueError as e:
         logging.error(f"script.py :\n Erreur de formatage de la date : {e}", exc_info=True)
         return (datetime.now()).strftime("%d.%m.%Y")
-
-
 
 def open_doc(doc_path):
     """ Crée une instance du template et la renvoie """
@@ -58,7 +53,7 @@ def create_json(raw_data):
         raise
     
     return data
-
+    
 def create_dir(path):
     """ Crée de répertoire si inexistant """
     try:
@@ -70,9 +65,7 @@ def create_dir(path):
 
 def create_placeholders(cl_type, data, custom_fields):
     """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
-
     placeholders = {}
-    
     if cl_type == 'Mobile Phone' :
         placeholders = {
             '{{Numéro_de_téléphone}}': '0' + str(
@@ -100,28 +93,28 @@ def create_placeholders(cl_type, data, custom_fields):
 
 def replace_placeholders(raw_data):
     """ Remplace les données dans le document template, modifie son nom, et l'enregistre au bon endroit """
-    
+    logging.debug("""
+    *********************************************************************************************************
+               ********************************** Start script.py **********************************
+    *********************************************************************************************************""")
     try:
         # création des JSON
         data = create_json(raw_data)
         custom_fields = create_json(data.get("custom_fields"))
-            
-        # récupère le type d'actif
-        cl_type = data.get('Cl_type', 'type pas pris en charge') or 'type pas pris en charge'
-      
-        # définir doc_path le chemin du fichier template à remplir
-        try :
-            doc_path = TEMPLATE[cl_type]
-        except Exception as e :
-            logging.error(f"\nValeur de cl_type = {cl_type}, erreur {e}\n")
         
+        # récupère le type d'actif
+        cl_type = data.get('Cl_type')
+        
+        # Choisi le template en fonction du type d'actif
+        doc_path = TEMPLATE[cl_type]
+          
         # créer les champs à insérer dans le doc
         placeholders = create_placeholders(cl_type, data, custom_fields)
 
-        # ouvrir doc template
+        # ouvrir doc template pour pouvoir le modifier
         doc = open_doc(doc_path)
         
-        # créer les dossiers de destination
+        # créer les dossiers de destination du fichier rempli
         create_dir('./documents_finaux')
         create_dir(os.path.join('./documents_finaux', placeholders["{{Nom}}"]))
         dossier_nom = os.path.join('./documents_finaux', placeholders["{{Nom}}"])
@@ -158,6 +151,5 @@ def replace_placeholders(raw_data):
     except Exception as e:
         logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
         
-
 if __name__ == '__main__':
     logging.info("************** MAIN START ****************")

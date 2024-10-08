@@ -1,21 +1,21 @@
 from flask import Flask, request, jsonify
 import logging
+from logging.handlers import RotatingFileHandler
 from script import replace_placeholders
 import json
 import re
 import os
 
-# Configurer le module de logging
+# Vérification et création du dossier de logs
 logs_directory = './logs'
-logs_file = os.path.join(logs_directory, 'log.txt')
-
-# Vérification et création du dossier avant le démarrage de l'application Flask
 if not os.path.exists(logs_directory):
     os.makedirs(logs_directory)
-
-# Configurer le module de logging pour écrire dans log_createDoc.txt
-logging.basicConfig(filename=logs_file,
-                    level=logging.DEBUG,
+logs_file = os.path.join(logs_directory, 'app.log')
+    
+# Configurer le module de logging avec limite de taille du fichier log
+log_handler = RotatingFileHandler(logs_file, maxBytes=1000000, backupCount=5)
+logging.basicConfig(handlers=[log_handler], 
+                    level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Créer l'objet Flask
@@ -23,16 +23,7 @@ app = Flask(__name__)
 
 # Définir la route pour le webhook
 @app.route('/webhook', methods=['POST'])
-def webhook():
-    
-    # crée le dossier des logs si inexistant
-    try:
-        if not os.path.exists('./logs'):
-            os.makedirs('./logs')
-    except Exception as e:
-        logging.error(f"script.py :\n Erreur lors de la création du directory './logs' : {e}", exc_info=True)
-        raise
-    
+def webhook():    
     logging.debug("""
     *********************************************************************************************************
                ********************************** Start app.py **********************************
