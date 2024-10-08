@@ -101,16 +101,13 @@ def replace_placeholders(raw_data):
         # création des JSON
         data = create_json(raw_data)
         custom_fields = create_json(data.get("custom_fields"))
-            
-        # récupère le type d'actif
-        cl_type = data.get('Cl_type', 'type pas pris en charge') or 'type pas pris en charge'
-      
-        # définir doc_path le chemin du fichier template à remplir
-        try :
-            doc_path = TEMPLATE[cl_type]
-        except Exception as e :
-            logging.error(f"\nValeur de cl_type = {cl_type}, erreur {e}\n")
         
+        # récupère le type d'actif
+        cl_type = data.get('Cl_type')
+        
+        # Choisi le template en fonction du type d'actif
+        doc_path = TEMPLATE[cl_type]
+          
         # créer les champs à insérer dans le doc
         placeholders = create_placeholders(cl_type, data, custom_fields)
 
