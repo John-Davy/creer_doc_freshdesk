@@ -52,7 +52,7 @@ json_data_list = [
    "custom_fields" : "{\"product_50000227369\":null,\"vendor_50000227369\":null,\"cost_50000227369\":null,\"warranty_50000227369\":null,\"acquisition_date_50000227369\":null,\"warranty_expiry_date_50000227369\":null,\"domain_50000227369\":null,\"asset_state_50000227369\":4,\"serial_number_50000227369\":null,\"last_audit_date_50000227369\":null,\"os_50000227396\":null,\"numro_de_tlphone_50000227396\":null,\"os_version_50000227396\":null,\"memory_50000227396\":null,\"imei_number_50000227396\":null,\"pin_code_50000227396\":null,\"puk_code_50000227396\":null,\"lock_code_50000227396\":null}",
    "Asset_tag" : "test",
    "Used_by" : "test",
-   "Date" : "",
+   "Date" : "Thu, 26 Sep, 2024 15:54 GMT +0200",
    "Email_D" : "test",
    "Cl_type" : "Tablet"
     },
