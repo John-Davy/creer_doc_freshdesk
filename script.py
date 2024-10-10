@@ -8,7 +8,11 @@ import json
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
             "Laptop" : './templates/template_recommandations_Laptop.docx',
-            "Tablet" : './templates/template_recommandations_Tablet.docx'}
+            "Tablet" : './templates/template_recommandations_Tablet.docx',
+}
+            
+# Initialisation de l'indicateur d'erreur
+ERRORS_OCCURED = False            
 
 # Renvoi un nom de fichier unique
 def get_unique_filename(file_path):
@@ -28,6 +32,7 @@ def format_date(date_str):
         return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
         logging.error(f"script.py : Erreur de formatage de la date : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         return str(datetime.now().strftime('%d.%m.%Y'))
 
 def open_doc(doc_path):
@@ -39,6 +44,7 @@ def open_doc(doc_path):
         return doc
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors du chargement du document : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
 
 def create_json(raw_data):
@@ -47,9 +53,11 @@ def create_json(raw_data):
         data = json.loads(raw_data)
     except json.JSONDecodeError as e:
         logging.error(f"script.py :\n Erreur lors du parsing du JSON : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors de l'obtention du JSON : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
     return data
     
@@ -60,6 +68,7 @@ def create_dir(path):
             os.makedirs(path)
     except Exception as e:
         logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
         
 def init_palceholders(data, custom_fields):
@@ -81,6 +90,7 @@ def init_palceholders(data, custom_fields):
         if value not in [ None, ""] :
             placeholders[key] = value
         else :
+            ERRORS_OCCURED = True
             raise ValueError(f"La variable {key} n'a pas de valeur = {key} = {value} !")
             
     return placeholders
@@ -106,6 +116,7 @@ def create_placeholders(cl_type, data, custom_fields):
         for key, value in dic.items():
             placeholders[key] = value
     elif cl_type not in ['Tablet', 'Laptop']:
+        ERRORS_OCCURED = True
         raise ValueError("Le type d'actif reçu n'est pas géré par ce script")        
     return placeholders
 
@@ -115,6 +126,7 @@ def replace_placeholders(raw_data):
     *********************************************************************************************************
                ********************************** Start script.py **********************************
     *********************************************************************************************************""")
+    ERRORS_OCCURED = False
     try:
         # création des JSON
         data = create_json(raw_data)
@@ -152,6 +164,7 @@ def replace_placeholders(raw_data):
         # Convertir en .PDF
         result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
         if result.returncode != 0:
+            ERRORS_OCCURED = True
             raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
         
         # Récupère le nom du fichier et ajoute .pdf
@@ -162,14 +175,18 @@ def replace_placeholders(raw_data):
         if os.path.exists(pdf_generated_path):
             os.rename(pdf_generated_path, pdf_path)
         else:
+            ERRORS_OCCURED = True
             raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
             
         # Effacer le .docx
         if os.path.isfile(docx_path):
             os.remove(docx_path)
+            
+        return ERRORS_OCCURED
 
     except Exception as e:
         logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
+        ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
         
 if __name__ == '__main__':

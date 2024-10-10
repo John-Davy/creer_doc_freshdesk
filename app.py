@@ -18,8 +18,7 @@ logging.basicConfig(handlers=[log_handler],
                     level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Initialisation de l'indicateur d'erreur
-errors_occurred = False
+
 
 # Créer l'objet Flask
 app = Flask(__name__)
@@ -42,8 +41,11 @@ def webhook():
     if raw_data:
     # Traiter les données JSON ou la chaîne brute
         try:
-            replace_placeholders(raw_data)
-            return 'app.py : Succès', 200
+            errors_occurred = replace_placeholders(raw_data)
+            if not errors_occurred :
+                return 'Succès', 200
+            else :
+                return 'Error interne au script.py', 500
         except Exception as e:
             logging.error(f'app.py :\n Erreur lors du traitement du webhook : {e}', exc_info=True)
             return 'app.py :\n Erreur interne du serveur', 500
