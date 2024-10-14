@@ -4,6 +4,7 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
+from api import add_attachment_to_ticket
 
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
@@ -133,7 +134,7 @@ def replace_placeholders(raw_data):
         custom_fields = create_json(data.get("custom_fields"))
         
         # récupère le type d'actif
-        cl_type = data.get('Cl_type')
+        cl_type = data.get('Cl_type')       
         
         # Choisi le template en fonction du type d'actif
         doc_path = TEMPLATE[cl_type]
@@ -171,17 +172,19 @@ def replace_placeholders(raw_data):
         pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
         # Récupère le chemin vers le fichier .PDF généré
         pdf_generated_path = os.path.join(os.getcwd(), pdf_generated_filename)
+        
         # Déplacer le .PDF à pdf_path
         if os.path.exists(pdf_generated_path):
             os.rename(pdf_generated_path, pdf_path)
+            if data.get('ticket_id') :
+                add_attachment_to_ticket(data.get('ticket_id'), pdf_path)
         else:
             ERRORS_OCCURED = True
-            raise FileNotFoundError(f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
+            raise FileNotFoundError(f"script.py : Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
             
         # Effacer le .docx
         if os.path.isfile(docx_path):
             os.remove(docx_path)
-            
         return ERRORS_OCCURED
 
     except Exception as e:
