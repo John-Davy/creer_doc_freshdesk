@@ -1,6 +1,5 @@
 import requests
-
-        
+    
 """ 
 ici la requete CURL qui fonctionne :
 
