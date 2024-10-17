@@ -4,12 +4,12 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
-from api import add_attachment_to_ticket
+from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_service
 
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
-            "Laptop" : './templates/template_recommandations_Laptop.docx',
-            "Tablet" : './templates/template_recommandations_Tablet.docx',
+            "Laptop" : './templates/template_installer_Laptop_ou_Tablet.docx',
+            "Tablet" : './templates/template_installer_Laptop_ou_Tablet.docx',
 }
             
 # Initialisation de l'indicateur d'erreur
@@ -114,11 +114,38 @@ def create_placeholders(cl_type, data, custom_fields):
             '{{Lock}}': (
                 custom_fields.get('lock_code_50000227396', '.....................') or '.....................')
         }
-        for key, value in dic.items():
-            placeholders[key] = value
-    elif cl_type not in ['Tablet', 'Laptop']:
+    elif cl_type in ['Tablet', 'Laptop'] :
+        dic = {
+            "{{Modèle}}" : resquest_product_name(custom_fields.get('product_50000227369')),
+            "{{Direction}}" : "test",
+            "{{Nom du service}}" : resquest_collaborateur_service('j-d-ferreirapro-geneve-ch'),
+            "{{Used_by1}}" : data.get("Used_by"),
+            "{{Nom_T1}}" : data.get("Nom_T"),
+            "{{Nom_T}}" : data.get("Nom_T"),
+            "{{b_Wupdate}}" : '✓' if data.get("b_Wupdate", False) else '☐',
+            "{{b_Lvantage}}" : '✓' if data.get("b_Lvantage", False) else '☐',
+            "{{b_Dell}}" : '✓' if data.get("b_Dell", False) else '☐',
+            "{{b_Intel}}" : '✓' if data.get("b_Intel", False) else '☐',
+            "{{b_Ms}}" : '✓' if data.get("b_Ms", False) else '☐',
+            "{{Domaine}}" : data.get("Domaine", "..........") or "..........",
+            "{{b_Sophos}}" : '✓' if data.get("b_Sophos", False) else '☐',
+            "{{b_Ninite}}" : '✓' if data.get("b_Ninite", False) else '☐',
+            "{{b_Of}}" : '✓' if data.get("b_Of", False) else '☐',
+            "{{b_Fclient}}" : '✓' if data.get("b_Fclient", False) else '☐',
+            "{{b_Edge}}" : '✓' if data.get("b_Edge", False) else '☐',
+            "{{b_Teams}}" : '✓' if data.get("b_Teams", False) else '☐',
+            "{{b_PRT}}" : '✓' if data.get("b_PRT", False) else '☐',
+            "{{commentaire}}" : data.get("commentaire", "") or "",
+            "{{b_Poutlook}}" : '✓' if data.get("b_Poutlook", False) else '☐',
+            "{{Matériel_Sup_list}}" : data.get("Matériel_Sup_list", "aucun") or "aucun",
+        }
+    else :
         ERRORS_OCCURED = True
-        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")        
+        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")    
+    
+    for key, value in dic.items():
+            placeholders[key] = value
+            
     return placeholders
 
 def replace_placeholders(raw_data):
