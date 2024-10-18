@@ -4,7 +4,7 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
-from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_service
+from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_info
 
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
@@ -100,6 +100,14 @@ def create_placeholders(cl_type, data, custom_fields):
     """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
     placeholders = init_palceholders(data, custom_fields)
     
+    # questionne l'API pour récupérer les données de l'employé 
+    collaborateur_info = resquest_collaborateur_info(data.get("Used_by"))
+    collaborateurs = [requester for requester in collaborateur_info['requesters'] if requester['active']]
+    direction = collaborateurs[0].get('address')
+    logging.debug(f'direction : {direction}')
+    nom_de_service = collaborateurs[0].get('department_names')[0] if collaborateurs[0].get('department_names') else 'n/c'
+    logging.debug(f'nom de service : {nom_de_service}')
+    
     # gerer les champs spécifiques si l'actif est un Mobile Phone
     if cl_type == 'Mobile Phone' :
         dic = {
@@ -117,8 +125,8 @@ def create_placeholders(cl_type, data, custom_fields):
     elif cl_type in ['Tablet', 'Laptop'] :
         dic = {
             "{{Modèle}}" : resquest_product_name(custom_fields.get('product_50000227369')),
-            "{{Direction}}" : "test",
-            "{{Nom du service}}" : resquest_collaborateur_service('j-d-ferreirapro-geneve-ch'),
+            "{{Direction}}" : direction,
+            "{{Nom du service}}" : nom_de_service,
             "{{Used_by1}}" : data.get("Used_by"),
             "{{Nom_T1}}" : data.get("Nom_T"),
             "{{Nom_T}}" : data.get("Nom_T"),
@@ -135,7 +143,7 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{b_Edge}}" : '✓' if data.get("b_Edge", False) else '☐',
             "{{b_Teams}}" : '✓' if data.get("b_Teams", False) else '☐',
             "{{b_PRT}}" : '✓' if data.get("b_PRT", False) else '☐',
-            "{{commentaire}}" : data.get("commentaire", "") or "",
+            "{{commentaire}}" : data.get("commentaire", "aucun") or "aucun",
             "{{b_Poutlook}}" : '✓' if data.get("b_Poutlook", False) else '☐',
             "{{Matériel_Sup_list}}" : data.get("Matériel_Sup_list", "aucun") or "aucun",
         }
