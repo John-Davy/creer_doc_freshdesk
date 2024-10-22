@@ -143,11 +143,11 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{b_Edge}}" : '✓' if data.get("b_Edge", False) else '☐',
             "{{b_Teams}}" : '✓' if data.get("b_Teams", False) else '☐',
             "{{b_PRT}}" : '✓' if data.get("b_PRT", False) else '☐',
-            "{{commentaire}}" : data.get("commentaire", "aucun") or "aucun",
             "{{b_Poutlook}}" : '✓' if data.get("b_Poutlook", False) else '☐',
-            "{{Matériel_Sup_list}}" : data.get("Matériel_Sup_list", "aucun") or "aucun",
-        }
-    else :
+            "{{commentaire}}" : ('Commentaire : ' + data.get("commentaire", "") or "") if data.get("commentaire", "") else '',
+            "{{Matériel_Sup_list}}" : ('Matériel supplémentaire : ' + data.get("Matériel_Sup_list")) if data.get("Matériel_Sup_list", "") else ""
+            }
+    else:
         ERRORS_OCCURED = True
         raise ValueError("Le type d'actif reçu n'est pas géré par ce script")    
     
