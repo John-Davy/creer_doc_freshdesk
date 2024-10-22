@@ -4,12 +4,12 @@ from docx import Document
 from datetime import datetime
 import subprocess
 import json
-from api import add_attachment_to_ticket
+from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_info
 
 # Définir le chemin du template
 TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
-            "Laptop" : './templates/template_recommandations_Laptop.docx',
-            "Tablet" : './templates/template_recommandations_Tablet.docx',
+            "Laptop" : './templates/template_installer_Laptop_ou_Tablet.docx',
+            "Tablet" : './templates/template_installer_Laptop_ou_Tablet.docx',
 }
             
 # Initialisation de l'indicateur d'erreur
@@ -100,6 +100,14 @@ def create_placeholders(cl_type, data, custom_fields):
     """ Crée le dictionnaire avec les bonnes clefs et valeurs pour remplir le doc """
     placeholders = init_palceholders(data, custom_fields)
     
+    # questionne l'API pour récupérer les données de l'employé 
+    collaborateur_info = resquest_collaborateur_info(data.get("Used_by"))
+    collaborateurs = [requester for requester in collaborateur_info['requesters'] if requester['active']]
+    direction = collaborateurs[0].get('address')
+    logging.debug(f'direction : {direction}')
+    nom_de_service = collaborateurs[0].get('department_names')[0] if collaborateurs[0].get('department_names') else 'n/c'
+    logging.debug(f'nom de service : {nom_de_service}')
+    
     # gerer les champs spécifiques si l'actif est un Mobile Phone
     if cl_type == 'Mobile Phone' :
         dic = {
@@ -114,11 +122,38 @@ def create_placeholders(cl_type, data, custom_fields):
             '{{Lock}}': (
                 custom_fields.get('lock_code_50000227396', '.....................') or '.....................')
         }
-        for key, value in dic.items():
-            placeholders[key] = value
-    elif cl_type not in ['Tablet', 'Laptop']:
+    elif cl_type in ['Tablet', 'Laptop'] :
+        dic = {
+            "{{Modèle}}" : resquest_product_name(custom_fields.get('product_50000227369')),
+            "{{Direction}}" : direction,
+            "{{Nom du service}}" : nom_de_service,
+            "{{Used_by1}}" : data.get("Used_by"),
+            "{{Nom_T1}}" : data.get("Nom_T"),
+            "{{Nom_T}}" : data.get("Nom_T"),
+            "{{b_Wupdate}}" : '✓' if data.get("b_Wupdate", False) else '☐',
+            "{{b_Lvantage}}" : '✓' if data.get("b_Lvantage", False) else '☐',
+            "{{b_Dell}}" : '✓' if data.get("b_Dell", False) else '☐',
+            "{{b_Intel}}" : '✓' if data.get("b_Intel", False) else '☐',
+            "{{b_Ms}}" : '✓' if data.get("b_Ms", False) else '☐',
+            "{{Domaine}}" : data.get("Domaine", "..........") or "..........",
+            "{{b_Sophos}}" : '✓' if data.get("b_Sophos", False) else '☐',
+            "{{b_Ninite}}" : '✓' if data.get("b_Ninite", False) else '☐',
+            "{{b_Of}}" : '✓' if data.get("b_Of", False) else '☐',
+            "{{b_Fclient}}" : '✓' if data.get("b_Fclient", False) else '☐',
+            "{{b_Edge}}" : '✓' if data.get("b_Edge", False) else '☐',
+            "{{b_Teams}}" : '✓' if data.get("b_Teams", False) else '☐',
+            "{{b_PRT}}" : '✓' if data.get("b_PRT", False) else '☐',
+            "{{b_Poutlook}}" : '✓' if data.get("b_Poutlook", False) else '☐',
+            "{{commentaire}}" : ('Commentaire : ' + data.get("commentaire", "") or "") if data.get("commentaire", "") else '',
+            "{{Matériel_Sup_list}}" : ('Matériel supplémentaire : ' + data.get("Matériel_Sup_list")) if data.get("Matériel_Sup_list", "") else ""
+            }
+    else:
         ERRORS_OCCURED = True
-        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")        
+        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")    
+    
+    for key, value in dic.items():
+            placeholders[key] = value
+            
     return placeholders
 
 def replace_placeholders(raw_data):
