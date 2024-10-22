@@ -2,6 +2,29 @@ import requests
 import logging
 from requests.auth import HTTPBasicAuth
 
+def add_note_to_ticket(ticket_id, note_content):
+    """ 
+    Cette fonction reçoit un identifiant de ticket Freshdesk et le contenu du message pour ajouter une note 
+    """
+    api_key = 'ouGa4QwnLWHsTWTk-uxy'  # Remplacez par votre clé API
+    note_url = f'https://pro-geneve.freshservice.com/api/v2/tickets/{ticket_id}/notes'
+
+    # Préparer les données de la note et le fichier
+    files = {
+        'body': (None, note_content),
+        'private': (None, 'false')
+    }
+
+    # Créer la note avec attachement
+    response = requests.post(note_url, files=files, auth=(api_key, 'X'))
+    
+    # Vérifier la réponse
+    if response.status_code == 201:
+        logging.debug('Note ajoutée avec succès')
+    else:
+        logging.debug("Erreur lors de l'insertion la note :", response.status_code, response.text)
+        
+    
 def resquest_product_name(product_id):
     # Détails d'authentification
     api_key = 'ouGa4QwnLWHsTWTk-uxy'
@@ -20,7 +43,6 @@ def resquest_product_name(product_id):
     else:
         raise ValueError(f"Erreur resquest_product_name: Impossible de récupérer les informations du produit. Code d'état : {response.status_code}")
             
-
 def resquest_collaborateur_info (collaborateur_name):
     """ reçoit le nom d'un collaborateur, questionne l'API et renvoie la réponse au format Json"""
     """ champs recherchés 'department_names' 'address' : voir bas de page pour réponse Json complet"""
@@ -48,7 +70,6 @@ def add_attachment_to_ticket(ticket_id, file_path):
     puis, ajoute ce dernier en note dans le ticket 
     """
     api_key = 'ouGa4QwnLWHsTWTk-uxy'  # Remplacez par votre clé API
-    ticket_id = ticket_id.split('-')[1]  # Filtrer pour n'avoir que les chiffres du ticket ID
     note_url = f'https://pro-geneve.freshservice.com/api/v2/tickets/{ticket_id}/notes'
     note_content = "Voici le fichier d'attribution de matériel généré !"  # Contenu de la note
 
@@ -64,9 +85,9 @@ def add_attachment_to_ticket(ticket_id, file_path):
 
     # Vérifier la réponse
     if response.status_code == 201:
-        print('Fichier attaché avec succès')
+        logging.debug('Fichier attaché avec succès')
     else:
-        print('Erreur:', response.status_code, response.text)
+        logging.debug("Erreur lors de l'attachement du fichier à la note :", response.status_code, response.text)
         
 """ 
 

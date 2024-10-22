@@ -1,19 +1,23 @@
 import os
 import logging
-from docx import Document
-from datetime import datetime
 import subprocess
 import json
-from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_info
+from docx import Document
+from datetime import datetime
+from api import add_attachment_to_ticket, resquest_product_name, resquest_collaborateur_info, add_note_to_ticket
+from collections import defaultdict
 
 # Définir le chemin du template
-TEMPLATE = {"Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
-            "Laptop" : './templates/template_installer_Laptop_ou_Tablet.docx',
-            "Tablet" : './templates/template_installer_Laptop_ou_Tablet.docx',
-}
+TEMPLATE = defaultdict(lambda: "Le type d'actif reçu n'est pas pris en charge",{
+    "Mobile Phone" : './templates/template_recommandations_Mobile_Phone.docx',
+    "Laptop" : './templates/template_installer_Laptop_ou_Tablet.docx',
+    "Tablet" : './templates/template_installer_Laptop_ou_Tablet.docx'
+})
+
+TICKET_ID = ''
             
 # Initialisation de l'indicateur d'erreur
-ERRORS_OCCURED = False            
+ERRORS_OCCURED = False      
 
 # Renvoi un nom de fichier unique
 def get_unique_filename(file_path):
@@ -32,19 +36,28 @@ def format_date(date_str):
         date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')
         return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
-        logging.error(f"script.py : Erreur de formatage de la date : {e}", exc_info=True)
+        content_note = (f"script.py : Erreur de formatage de la date : {e}") 
+        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
         return str(datetime.now().strftime('%d.%m.%Y'))
 
 def open_doc(doc_path):
     """ Crée une instance du template et la renvoie """
     try:
+        # Vérifie si le chemin du template existe
         if not os.path.isfile(doc_path):
-            raise FileNotFoundError(f"Le fichier template n'existe pas à l'emplacement : {doc_path}")
+            content_note = f"Le fichier template n'existe pas à l'emplacement : {doc_path}"
+            logging.error(content_note)
+            add_note_to_ticket(TICKET_ID, content_note)
+            raise FileNotFoundError(content_note, exc_info=True)
+        # Crée une instance doc avec le template situé à doc_path
         doc = Document(doc_path)
         return doc
     except Exception as e:
-        logging.error(f"script.py :\n Erreur lors du chargement du document : {e}", exc_info=True)
+        content_note = f"script.py :\n Erreur lors du chargement du document : {e}"
+        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
 
@@ -53,11 +66,15 @@ def create_json(raw_data):
     try:
         data = json.loads(raw_data)
     except json.JSONDecodeError as e:
-        logging.error(f"script.py :\n Erreur lors du parsing du JSON : {e}", exc_info=True)
+        content_note = f"script.py :\n Erreur lors du parsing du JSON : {e}"
+        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
     except Exception as e:
-        logging.error(f"script.py :\n Erreur lors de l'obtention du JSON : {e}", exc_info=True)
+        content_note = f"script.py :\n Erreur lors de l'obtention du JSON : {e}"
+        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
     return data
@@ -68,11 +85,14 @@ def create_dir(path):
         if not os.path.exists(path):
             os.makedirs(path)
     except Exception as e:
-        logging.error(f"script.py :\n Erreur lors de la création du répertoire {path} : {e}", exc_info=True)
+        content_note = f"script.py :\n Erreur lors de la création du répertoire {path} : {e}"
+        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
-        raise # Propager l'exception pour app.py
+        raise # Propager l'exception à app.py
         
 def init_palceholders(data, custom_fields):
+    """ Reçoit les Json data et custom_fields et initialise le dictionnaire palceholders et le renvoi en sortie """
     placeholders = {}
     
     # gestion dela date
@@ -91,8 +111,10 @@ def init_palceholders(data, custom_fields):
         if value not in [ None, ""] :
             placeholders[key] = value
         else :
+            content_note = f"La variable {key} n'a pas de valeur = {key} = {value} !"
+            add_note_to_ticket(TICKET_ID, content_note)
             ERRORS_OCCURED = True
-            raise ValueError(f"La variable {key} n'a pas de valeur = {key} = {value} !")
+            raise ValueError(content_note)
             
     return placeholders
 
@@ -110,6 +132,7 @@ def create_placeholders(cl_type, data, custom_fields):
     
     # gerer les champs spécifiques si l'actif est un Mobile Phone
     if cl_type == 'Mobile Phone' :
+        # Initialise les valeurs reçues dans un dict pour les actifs de type Mobile Phone
         dic = {
             '{{Numéro_de_téléphone}}': '0' + str(
                 custom_fields.get('numro_de_tlphone_50000227396', '.....................') or '.....................'),
@@ -123,6 +146,7 @@ def create_placeholders(cl_type, data, custom_fields):
                 custom_fields.get('lock_code_50000227396', '.....................') or '.....................')
         }
     elif cl_type in ['Tablet', 'Laptop'] :
+        # Initialise les valeurs reçues dans un dict pour les actifs de type Tablet ou Laptop
         dic = {
             "{{Modèle}}" : resquest_product_name(custom_fields.get('product_50000227369')),
             "{{Direction}}" : direction,
@@ -148,9 +172,12 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{Matériel_Sup_list}}" : ('Matériel supplémentaire : ' + data.get("Matériel_Sup_list")) if data.get("Matériel_Sup_list", "") else ""
             }
     else:
+        content_note = "Le type d'actif reçu n'est pas géré par ce script"
+        add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
-        raise ValueError("Le type d'actif reçu n'est pas géré par ce script")    
+        raise ValueError(content_note)    
     
+    # complète le dict placeholders avec les valeurs et clés (format placeholders) des données envoyé par Freshdeks
     for key, value in dic.items():
             placeholders[key] = value
             
@@ -163,17 +190,23 @@ def replace_placeholders(raw_data):
                ********************************** Start script.py **********************************
     *********************************************************************************************************""")
     ERRORS_OCCURED = False
+    # initialisation du TICKET_ID
+    data = create_json(raw_data)
+    TICKET_ID = data.get('ticket_id').split('-')[1]
     try:
         # création des JSON
         data = create_json(raw_data)
         custom_fields = create_json(data.get("custom_fields"))
         
+        # mise à jour de TICKET_ID
+        TICKET_ID = data.get('ticket_id').split('-')[1]
+        
         # récupère le type d'actif
-        cl_type = data.get('Cl_type')       
+        cl_type = data.get('Cl_type')
         
         # Choisi le template en fonction du type d'actif
         doc_path = TEMPLATE[cl_type]
-          
+
         # créer les champs à insérer dans le doc
         placeholders = create_placeholders(cl_type, data, custom_fields)
         logging.debug(f"Afficher palceholders : {placeholders}")
@@ -185,23 +218,28 @@ def replace_placeholders(raw_data):
         create_dir('./documents_finaux')
         create_dir(os.path.join('./documents_finaux', placeholders["{{Used_by}}"]))
         dossier_nom = os.path.join('./documents_finaux', placeholders["{{Used_by}}"])
-
+        
+        # Définie les chemins de sauvegarde unique pour les documents .docx et .pdf finaux
         docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.docx'))
         pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.pdf'))
 
+        # Insérer les valeurs dans le document
         for paragraph in doc.paragraphs:
             for placeholder, value in placeholders.items():
                 if placeholder in paragraph.text:
                     paragraph.text = paragraph.text.replace(placeholder, str(value))
                     logging.debug(f"remplacement :\t {placeholder} ................ {str(value)}")
-
+        
+        # Sauvegarde l'isntance du document modifié
         doc.save(docx_path)
 
         # Convertir en .PDF
         result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
         if result.returncode != 0:
+            content_note = f"Erreur lors de la conversion en PDF : {result.stderr}"
+            add_note_to_ticket(TICKET_ID, content_note)
             ERRORS_OCCURED = True
-            raise subprocess.SubprocessError(f"Erreur lors de la conversion en PDF : {result.stderr}")
+            raise subprocess.SubprocessError(content_note)
         
         # Récupère le nom du fichier et ajoute .pdf
         pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
@@ -211,11 +249,13 @@ def replace_placeholders(raw_data):
         # Déplacer le .PDF à pdf_path
         if os.path.exists(pdf_generated_path):
             os.rename(pdf_generated_path, pdf_path)
-            if data.get('ticket_id') :
-                add_attachment_to_ticket(data.get('ticket_id'), pdf_path)
+            if TICKET_ID :
+                add_attachment_to_ticket(TICKET_ID, pdf_path)
         else:
+            content_note = f"script.py : Le fichier PDF généré n'existe pas :\n {pdf_generated_path}"
+            add_note_to_ticket(TICKET_ID, content_note)
             ERRORS_OCCURED = True
-            raise FileNotFoundError(f"script.py : Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
+            raise FileNotFoundError(content_note)
             
         # Effacer le .docx
         if os.path.isfile(docx_path):
@@ -223,7 +263,9 @@ def replace_placeholders(raw_data):
         return ERRORS_OCCURED
 
     except Exception as e:
-        logging.error(f"script.py :\n Erreur dans replace_placeholders : {e}", exc_info=True)
+        content_note = f"script.py :\n Erreur dans replace_placeholders : {e}"
+        add_note_to_ticket(TICKET_ID, content_note)
+        logging.error(content_note, exc_info=True)
         ERRORS_OCCURED = True
         raise # Propager l'exception pour app.py
         

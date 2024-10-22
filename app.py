@@ -13,7 +13,7 @@ if not os.path.exists(logs_directory):
 logs_file = os.path.join(logs_directory, 'app.log')
     
 # Configurer le module de logging avec limite de taille du fichier log
-log_handler = RotatingFileHandler(logs_file, maxBytes=1000000, backupCount=5)
+log_handler = RotatingFileHandler(logs_file, maxBytes=10000, backupCount=5)
 logging.basicConfig(handlers=[log_handler], 
                     level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
