@@ -4,8 +4,6 @@ from logging.handlers import RotatingFileHandler
 from script import replace_placeholders
 import os
 
-API_KEY = 'jkGhphxMKSTd6UowRta' # clé API freshdesk
-
 # Vérification et création du dossier de logs
 logs_directory = './logs'
 if not os.path.exists(logs_directory):
@@ -17,8 +15,6 @@ log_handler = RotatingFileHandler(logs_file, maxBytes=10000, backupCount=5)
 logging.basicConfig(handlers=[log_handler], 
                     level=logging.DEBUG, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 
 # Créer l'objet Flask
 app = Flask(__name__)

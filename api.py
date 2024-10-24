@@ -2,38 +2,33 @@ import requests
 import logging
 from requests.auth import HTTPBasicAuth
 
-def add_note_to_ticket(ticket_id, note_content):
-    """ 
-    Cette fonction reçoit un identifiant de ticket Freshdesk et le contenu du message pour ajouter une note 
-    """
-    api_key = 'ouGa4QwnLWHsTWTk-uxy'  # Remplacez par votre clé API
-    note_url = f'https://pro-geneve.freshservice.com/api/v2/tickets/{ticket_id}/notes'
+# Clé API constante global
+API_KEY = 'ouGa4QwnLWHsTWTk-uxy' # clé API freshdesk
 
+def add_note_to_ticket(ticket_id, note_content):
+    """ Cette fonction reçoit un identifiant de ticket Freshdesk et le contenu du message pour ajouter une note """
+    # URL API note de ticket
+    note_url = f'https://pro-geneve.freshservice.com/api/v2/tickets/{ticket_id}/notes'
     # Préparer les données de la note et le fichier
     files = {
         'body': (None, note_content),
         'private': (None, 'false')
     }
-
     # Créer la note avec attachement
-    response = requests.post(note_url, files=files, auth=(api_key, 'X'))
-    
+    response = requests.post(note_url, files=files, auth=(API_KEY, 'X'))
     # Vérifier la réponse
     if response.status_code == 201:
         logging.debug('Note ajoutée avec succès')
     else:
         logging.debug("Erreur lors de l'insertion la note :", response.status_code, response.text)
-        
     
 def resquest_product_name(product_id):
-    # Détails d'authentification
-    api_key = 'ouGa4QwnLWHsTWTk-uxy'
+    """ Reçoit l'ID d'un produit et renvoie le nom de celui-ci """
+    # URL API produits
     freshdesk_url = f'https://pro-geneve.freshservice.com/api/v2/products/{product_id}'
-
     # Effectuer la requête GET
-    response = requests.get(freshdesk_url, auth=HTTPBasicAuth(api_key, 'X'))
+    response = requests.get(freshdesk_url, auth=HTTPBasicAuth(API_KEY, 'X'))
     logging.debug(f'valeur réponse produits api : {response}')
-
     # Vérifier si la requête est réussie
     if response.status_code == 200:
         product_info = response.json()
@@ -46,16 +41,14 @@ def resquest_product_name(product_id):
 def resquest_collaborateur_info (collaborateur_name):
     """ reçoit le nom d'un collaborateur, questionne l'API et renvoie la réponse au format Json"""
     """ champs recherchés 'department_names' 'address' : voir bas de page pour réponse Json complet"""
-    # Détails d'authentification
+    # Séparer collaborateur_name en nom et prénom
     collaborateur_firstname = collaborateur_name.split(" ")[0]
     collaborateur_lastname = collaborateur_name.split(" ")[1]
-    api_key = 'ouGa4QwnLWHsTWTk-uxy'
+    # URL API questionner la BDD des demandeur et demandeur agent
     freshdesk_url = f"https://pro-geneve.freshservice.com/api/v2/requesters?query=name%3A%27{collaborateur_firstname}%20{collaborateur_lastname}%27&active=true&include_agents=true"
-
     # Effectuer la requête GET
-    response = requests.get(freshdesk_url, auth=HTTPBasicAuth(api_key, 'X'))
+    response = requests.get(freshdesk_url, auth=HTTPBasicAuth(API_KEY, 'X'))
     logging.debug(f'valeur réponse collaborateurs api : {response}')
-
     # Vérifier si la requête est réussie
     if response.status_code == 200:
         collaborateur_info = response.json()
@@ -65,24 +58,19 @@ def resquest_collaborateur_info (collaborateur_name):
         raise ValueError(f"Erreur resquest_collaborateur_info: Impossible de récupérer les informations du collaborateur. Code d'état : {response.status_code}")
        
 def add_attachment_to_ticket(ticket_id, file_path):
-    """ 
-    Cette fonction reçoit un identifiant de ticket Freshdesk et le chemin vers le document remplit 
-    puis, ajoute ce dernier en note dans le ticket 
-    """
-    api_key = 'ouGa4QwnLWHsTWTk-uxy'  # Remplacez par votre clé API
+    """ Cette fonction reçoit un identifiant de ticket Freshdesk et le chemin vers le document remplit 
+        puis, ajoute ce dernier en note dans le ticket                                                  """
+    # URL API des notes du ticket
     note_url = f'https://pro-geneve.freshservice.com/api/v2/tickets/{ticket_id}/notes'
     note_content = "Voici le fichier d'attribution de matériel généré !"  # Contenu de la note
-
     # Préparer les données de la note et le fichier
     files = {
         'attachments[]': open(file_path, 'rb'),
         'body': (None, note_content),
         'private': (None, 'false')
     }
-
     # Créer la note avec attachement
-    response = requests.post(note_url, files=files, auth=(api_key, 'X'))
-
+    response = requests.post(note_url, files=files, auth=(API_KEY, 'X'))
     # Vérifier la réponse
     if response.status_code == 201:
         logging.debug('Fichier attaché avec succès')
@@ -92,9 +80,11 @@ def add_attachment_to_ticket(ticket_id, file_path):
 """ 
 
 # recherche par prénom et nom concaténés    
-    curl -u ouGa4QwnLWHsTWTk-uxy:X -X GET "https://pro-geneve.freshservice.com/api/v2/requesters?query=name:%27john-davy%20ferreira%27&include_agents=true"
+
+curl -u ouGa4QwnLWHsTWTk-uxy:X -X GET "https://pro-geneve.freshservice.com/api/v2/requesters?query=name:%27john-davy%20ferreira%27&include_agents=true"
 leur réponse collaborateurs api : <Response [400]>
 # requete avec filtre compte actif = vrai 
+
 curl -u ouGa4QwnLWHsTWTk-uxy:X -X GET "https://pro-geneve.freshservice.com/api/v2/requesters?query=name:%27{collaborateur_firstname}%20{collaborateur_lastname}%27&active=true&include_agents=true"
 
 curl -u ouGa4QwnLWHsTWTk-uxy:X -X GET "https://pro-geneve.freshservice.com/api/v2/requesters?query=name%3A%27john-davy%20ferreira%27&active=true&include_agents=true"
