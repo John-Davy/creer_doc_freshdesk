@@ -102,7 +102,7 @@ def init_palceholders(data, custom_fields):
     
     # valeurs obligatoires
     requiered_values = {
-        "{{Used_by}}" : data.get("Used_by"),
+        "{{Utilise_par}}" : data.get("Used_by"),
         "{{Asset_tag}}" : data.get("Asset_tag"), 
         "{{Numéro_de_série}}" : custom_fields.get("serial_number_50000227369")
     }
@@ -151,7 +151,7 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{Modèle}}" : resquest_product_name(custom_fields.get('product_50000227369')),
             "{{Direction}}" : direction,
             "{{Nom du service}}" : nom_de_service,
-            "{{Used_by1}}" : data.get("Used_by"),
+            "{{Utilise_par1}}" : data.get("Used_by"),
             "{{Nom_T1}}" : data.get("Nom_T"),
             "{{Nom_T}}" : data.get("Nom_T"),
             "{{b_Wupdate}}" : '✓' if data.get("b_Wupdate", False) else '☐',
@@ -172,7 +172,7 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{Matériel_Sup_list}}" : ('Matériel supplémentaire : ' + data.get("Matériel_Sup_list")) if data.get("Matériel_Sup_list", "") else ""
             }
     else:
-        content_note = "Le type d'actif reçu n'est pas géré par ce script"
+        content_note = f"Le type d'actif reçu n'est pas géré par ce script. Type actif reçu = {cl_type}"
         add_note_to_ticket(TICKET_ID, content_note)
         ERRORS_OCCURED = True
         raise ValueError(content_note)    
@@ -216,12 +216,12 @@ def replace_placeholders(raw_data):
         
         # créer les dossiers de destination du fichier rempli
         create_dir('./documents_finaux')
-        create_dir(os.path.join('./documents_finaux', placeholders["{{Used_by}}"]))
-        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Used_by}}"])
+        create_dir(os.path.join('./documents_finaux', placeholders["{{Utilise_par}}"]))
+        dossier_nom = os.path.join('./documents_finaux', placeholders["{{Utilise_par}}"])
         
         # Définie les chemins de sauvegarde unique pour les documents .docx et .pdf finaux
-        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.docx'))
-        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Used_by}}"]}.pdf'))
+        docx_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Utilise_par}}"]}.docx'))
+        pdf_path = get_unique_filename(os.path.join(dossier_nom, f'Attribuer_{cl_type}_{placeholders["{{Asset_tag}}"]}_{placeholders["{{Utilise_par}}"]}.pdf'))
 
         # Insérer les valeurs dans le document
         for paragraph in doc.paragraphs:
