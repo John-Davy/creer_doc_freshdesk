@@ -18,9 +18,11 @@ def add_note_to_ticket(ticket_id, note_content):
     response = requests.post(note_url, files=files, auth=(API_KEY, 'X'))
     # Vérifier la réponse
     if response.status_code == 201:
-        logging.debug('Note ajoutée avec succès')
+        logging.info('Note ajoutée avec succès')
     else:
-        logging.debug("Erreur lors de l'insertion la note :", response.status_code, response.text)
+        logging.debug(f"add_note_to_ticket: ticket_id:{ticket_id};note_content:{note_content},\nfiles:{files}")
+        logging.info("Erreur lors de l'ajout de la note")
+        logging.error("Erreur lors de l'insertion la note : Status Code=%s, Message=%s", response.status_code, response.text)
     
 def resquest_product_name(product_id):
     """ Reçoit l'ID d'un produit et renvoie le nom de celui-ci """

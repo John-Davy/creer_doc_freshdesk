@@ -36,9 +36,9 @@ def format_date(date_str):
         date_obj = datetime.strptime(date_str, '%a, %d %b, %Y %H:%M GMT %z')
         return date_obj.strftime('%d.%m.%Y')
     except ValueError as e:
-        content_note = (f"script.py : Erreur de formatage de la date : {e}") 
+        content_note = (f"script.py :\nformat_date: Erreur de formatage de la date : {e}") 
         logging.error(content_note, exc_info=True)
-        add_note_to_ticket(TICKET_ID, content_note)
+        add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
         ERRORS_OCCURED = True
         return str(datetime.now().strftime('%d.%m.%Y'))
 
@@ -47,36 +47,36 @@ def open_doc(doc_path):
     try:
         # Vérifie si le chemin du template existe
         if not os.path.isfile(doc_path):
-            content_note = f"Le fichier template n'existe pas à l'emplacement : {doc_path}"
+            content_note = f"script.py :\nopen_doc : Le fichier template n'existe pas à l'emplacement : {doc_path}"
             logging.error(content_note)
-            add_note_to_ticket(TICKET_ID, content_note)
-            raise FileNotFoundError(content_note, exc_info=True)
+            add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
+            raise FileNotFoundError("script.py - open_doc")
         # Crée une instance doc avec le template situé à doc_path
         doc = Document(doc_path)
         return doc
     except Exception as e:
-        content_note = f"script.py :\n Erreur lors du chargement du document : {e}"
+        content_note = f"script.py :\nopen_doc : Erreur lors du chargement du document : {e}"
         logging.error(content_note, exc_info=True)
-        add_note_to_ticket(TICKET_ID, content_note)
+        add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
         ERRORS_OCCURED = True
-        raise # Propager l'exception pour app.py
+        raise FileNotFoundError("script.py - open_doc")
 
 def create_json(raw_data):
     """ Converti la chaine de caractère et renvoie un object JSON """
     try:
         data = json.loads(raw_data)
     except json.JSONDecodeError as e:
-        content_note = f"script.py :\n Erreur lors du parsing du JSON : {e}"
+        content_note = f"script.py :\ncreate_json : Erreur lors du parsing du JSON : {e}"
         logging.error(content_note, exc_info=True)
-        add_note_to_ticket(TICKET_ID, content_note)
+        add_note_to_ticket(TICKET_ID, "create_json : Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
         ERRORS_OCCURED = True
-        raise # Propager l'exception pour app.py
+        raise Exception()
     except Exception as e:
-        content_note = f"script.py :\n Erreur lors de l'obtention du JSON : {e}"
+        content_note = f"script.py :\ncreate_json : Erreur lors de l'obtention du JSON : {e}"
         logging.error(content_note, exc_info=True)
-        add_note_to_ticket(TICKET_ID, content_note)
+        add_note_to_ticket(TICKET_ID, "create_json : Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
         ERRORS_OCCURED = True
-        raise # Propager l'exception pour app.py
+        raise Exception()
     return data
     
 def create_dir(path):
@@ -85,11 +85,11 @@ def create_dir(path):
         if not os.path.exists(path):
             os.makedirs(path)
     except Exception as e:
-        content_note = f"script.py :\n Erreur lors de la création du répertoire {path} : {e}"
+        content_note = f"script.py :\ncreate_dir : Erreur lors de la création du répertoire {path} : {e}"
         logging.error(content_note, exc_info=True)
-        add_note_to_ticket(TICKET_ID, content_note)
+        add_note_to_ticket(TICKET_ID, "create_dir : Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
         ERRORS_OCCURED = True
-        raise # Propager l'exception à app.py
+        raise Exception()
         
 def init_palceholders(data, custom_fields):
     """ Reçoit les Json data et custom_fields et initialise le dictionnaire palceholders et le renvoi en sortie """
@@ -111,11 +111,10 @@ def init_palceholders(data, custom_fields):
         if value not in [ None, ""] :
             placeholders[key] = value
         else :
-            content_note = f"La variable {key} n'a pas de valeur = {key} = {value} !"
-            add_note_to_ticket(TICKET_ID, content_note)
+            content_note = f"La variable {key} n'a pas de valeur !"
+            logging.error(f"script.py :\ninit_palceholders : {content_note}")
             ERRORS_OCCURED = True
-            raise ValueError(content_note)
-            
+            add_note_to_ticket(TICKET_ID, content_note)
     return placeholders
 
 def create_placeholders(cl_type, data, custom_fields):
@@ -172,10 +171,11 @@ def create_placeholders(cl_type, data, custom_fields):
             "{{Matériel_Sup_list}}" : ('Matériel supplémentaire : ' + data.get("Matériel_Sup_list")) if data.get("Matériel_Sup_list", "") else ""
             }
     else:
-        content_note = f"Le type d'actif reçu n'est pas géré par ce script. Type actif reçu = {cl_type}"
+        content_note = (f"Le type d'actif reçu n'est pas géré par ce script. Type actif reçu = {cl_type}")
         add_note_to_ticket(TICKET_ID, content_note)
+        logging.error(f"script.py :\ncreate_placeholders : {note_content}")
         ERRORS_OCCURED = True
-        raise ValueError(content_note)    
+        raise ValueError()
     
     # complète le dict placeholders avec les valeurs et clés (format placeholders) des données envoyé par Freshdeks
     for key, value in dic.items():
@@ -237,9 +237,10 @@ def replace_placeholders(raw_data):
         result = subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', docx_path], capture_output=True, text=True)
         if result.returncode != 0:
             content_note = f"Erreur lors de la conversion en PDF : {result.stderr}"
-            add_note_to_ticket(TICKET_ID, content_note)
+            logging.error(f"script.py :\nreplace_placeholders : {content_note}")
+            add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
             ERRORS_OCCURED = True
-            raise subprocess.SubprocessError(content_note)
+            raise ValueError() 
         
         # Récupère le nom du fichier et ajoute .pdf
         pdf_generated_filename = os.path.splitext(os.path.basename(docx_path))[0] + '.pdf'
@@ -252,10 +253,11 @@ def replace_placeholders(raw_data):
             if TICKET_ID :
                 add_attachment_to_ticket(TICKET_ID, pdf_path)
         else:
-            content_note = f"script.py : Le fichier PDF généré n'existe pas :\n {pdf_generated_path}"
-            add_note_to_ticket(TICKET_ID, content_note)
+            content_note = (f"Le fichier PDF généré n'existe pas :\n {pdf_generated_path}")
+            logging.error(f"script.py :\nreplace_placeholders : {note_content}")
+            add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, vérifier que l'inventaire soit bien à jour et contsacter l'administrateur si le problème persiste")
             ERRORS_OCCURED = True
-            raise FileNotFoundError(content_note)
+            raise FileNotFoundError()
             
         # Effacer le .docx
         if os.path.isfile(docx_path):
@@ -264,10 +266,10 @@ def replace_placeholders(raw_data):
 
     except Exception as e:
         content_note = f"script.py :\n Erreur dans replace_placeholders : {e}"
-        add_note_to_ticket(TICKET_ID, content_note)
-        logging.error(content_note, exc_info=True)
+        add_note_to_ticket(TICKET_ID, "Une erreur s'est produite, veuillez contacter votre administrateur si l'erreur se répète")
+        logging.error(f"script.py :\nreplace_placeholders : {content_note}", exc_info=True)
         ERRORS_OCCURED = True
-        raise # Propager l'exception pour app.py
+        raise ValueError()
         
 if __name__ == '__main__':
     logging.info("************** MAIN START ****************")
